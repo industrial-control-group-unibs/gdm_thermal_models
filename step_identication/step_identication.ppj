@@ -1,0 +1,17 @@
+;
+;	IEC 1131 project file
+;   C:\projects\gdm_thermal_models\step_identication\step_identication.ppj
+;
+
+IMAGE = "step_identication.img"
+PARAMS = "step_identication.par"
+PARFILE = "1"
+SOURCE = "step_identication.plc"
+TARGET = "adv200syn_7_2_7.tgt"
+FIRMWARE = "adv200syn_7_2_7_fw_lang.fl2"
+FPRJ_DOWNLLANG = 0
+APPGEN = "ADV200Syn_7_2_7_ApllGen.bat"
+LIB = "adv200lib\adv_inout.pll"
+LIB = "adv200lib\adv_general.pll"
+LIB = "adv200lib\adv_control.pll"
+LIB = "adv200lib\adv_basic.pll"
