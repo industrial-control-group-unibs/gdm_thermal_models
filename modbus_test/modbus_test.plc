@@ -1,7 +1,7 @@
 (*
  *
- * MDPlc source file: c:\projects\gdm_thermal_models\step_identication\Backup\step_identication.plc$
- * for project:       C:\projects\gdm_thermal_models\step_identication\step_identication.ppj
+ * MDPlc source file: c:\projects\gdm_thermal_models\modbus_test\modbus_test.plc
+ * for project:       c:\projects\gdm_thermal_models\modbus_test\modbus_test
  *
  *)
 
@@ -25,7 +25,8 @@ PROGRAM state_machine WITH Background;
 	InputConv : InputConversionADV200; 
 	RatedTorque : REAL; 
 	MaxTorque : REAL; 
-	VelConv : REAL; 
+	Cnt2A : REAL; 
+	rms_Id : RMS; 
 	END_VAR
 
 	(*********************)
@@ -169,6 +170,67 @@ END_FOR;
 
 END_FUNCTION_BLOCK
 
+FUNCTION_BLOCK RMS
+
+	VAR_INPUT
+	input : REAL; { DE:"actual value" } 
+	END_VAR
+
+	VAR_OUTPUT
+	rms : REAL; { DE:"computed rms value" } 
+	END_VAR
+
+	VAR
+	fast_buffer : CircularBuffer; 
+	medium_buffer : CircularBuffer; 
+	slow_buffer : CircularBuffer; 
+	END_VAR
+
+	{ CODE:ST }fast_buffer.input:=input*input;
+fast_buffer();
+
+ 
+IF (fast_buffer.overflow) THEN
+	medium_buffer.input:=fast_buffer.sum;
+	medium_buffer();
+	IF (medium_buffer.overflow) THEN
+		slow_buffer.input:=fast_buffer.sum;
+		slow_buffer();
+	END_IF;
+END_IF;
+rms:=SQRT(slow_buffer.sum*0.001);
+
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK CircularBuffer
+
+	VAR_INPUT
+	input : REAL; 
+	END_VAR
+
+	VAR_OUTPUT
+	sum : REAL; 
+	overflow : BOOL; 
+	END_VAR
+
+	VAR
+	buffer : ARRAY[ 0..9 ] OF REAL; 
+	idx : INT; 
+	END_VAR
+
+	{ CODE:ST }sum:=sum-buffer[idx];
+buffer[idx]:=input;
+sum:=sum+buffer[idx];
+IF idx>9 THEN
+	idx:=0;
+	overflow:=TRUE;
+ELSE
+	idx:=idx+1;
+	overflow:=FALSE;
+END_IF;
+
+END_FUNCTION_BLOCK
+
 	(********************)
 	(*                  *)
 	(*     PROGRAMS     *)
@@ -274,7 +336,7 @@ ENABLE_CYCLIC_PRG := FALSE;
 (* Imposto modalita' di controllo Torque -2- *)	
 sysControlMode := 1;
 
-sysAlarmReset:=TRUE;
+
 (* Leggo corrente continuativa del drive *)
 readRealPar.ipa := 300;
 readRealPar();
@@ -288,7 +350,8 @@ readIntPar();
 FullScaleSpeed := TO_REAL(readIntPar.val) ;
 InputConv.Krpm:=FullScaleSpeed/(16384.0*65536.0);
 InputConv.Krad_s:=InputConv.Krpm*2.0*PI/60.0;
-VelConv:=1.0/InputConv.Krad_s;
+
+Cnt2A:=InputConv.KArms;
 
 (* Motor Rated Current *)
 readRealPar.ipa := 2002;
@@ -309,8 +372,6 @@ InputConv.KCnt2Nm := 1.0 / KNm2Cnt;
 MaxTorque := 10.0;
 
 
-
-
 (* *********************************************************************************************** *)
 (* Abilito programma ciclico *)	
 ENABLE_CYCLIC_PRG := TRUE;
@@ -320,15 +381,15 @@ CYCLE_STOP := FALSE;
 
 
 
-
 END_STEP
 
 STEP Cycle_state :
-	{ CODE:ST }IF sysDIBitWordBit1 THEN
+	{ CODE:ST }IF (sysDIBitWordBit1) THEN
 	ENABLE_CYCLIC_PRG := TRUE;
 ELSE
 	ENABLE_CYCLIC_PRG := FALSE;
 END_IF;
+
 
 END_STEP
 
@@ -356,17 +417,12 @@ END_PROGRAM
 PROGRAM cyclic_prg
 
 	VAR
-	speed_cmd : REAL := 3.0; 
+	torque_cmd : REAL; 
+	torque_max : REAL := 3.0; 
 	speed_max : REAL := 100.0; 
-	t : REAL; 
-	speed_delta : REAL; 
-	t_step : REAL; 
-	t_max : REAL; 
-	speed_min : REAL; 
-	direction : REAL; 
 	END_VAR
 
-	{ CODE:ST }(* Convert input from drive to SI units *)
+	{ CODE:ST }(* Conversione degli input del drive nel sistema internazionale *)
 InputConv.sysSpd := sysSpd;
 InputConv.sysPos := sysPos;
 InputConv.sysIq := sysIq;
@@ -375,54 +431,49 @@ InputConv.sysRev := sysRev;
 InputConv.PosDINT:=sysSpeedPosPulsesPerRev; 
 InputConv();
 
-(* *** *)
+(* Le grandezze di input del drive sono
+	v_Position [rad]
+	v_Speed    [rad/s]
+	v_Torque   [Nm] *)
+
+(*
+Se il drive  è controllato in coppia il riferimento di coppia è
+sysTrqFFwd := TO_DINT((torque_cmd) * KNm2Cnt);
+
+Se il controllore  è controllato in velocità il riferimento di velocità è
+sysSpdRef1 := TO_DINT(speed_cmd*VelConv);    
+Per il feedforward di coppia usare:
+sysTrqFFwd := TO_DINT((torque_cmd) * KNm2Cnt);
+*)
+
+(* ENABLE_CYCLIC_PRG è a true se il DI1 è su *)
 IF (NOT ENABLE_CYCLIC_PRG) THEN
-	speed_delta:=2.0;
-	speed_max:=100.0;
-	speed_min:=10.0;
-	speed_cmd := speed_min;
-	
-	sysSpdRef1:=0;
-	t_step:=6.0;
-	t_max:=60.0*60.0*2.0;
-	direction:=1.0;
+(* Se il motore non è abilitato *)
+	torque_cmd := 0.0;
 ELSE
-
-	sysSpdRef1 := TO_DINT(speed_cmd*VelConv);    
-
-	t:=t+0.001;
-	IF (t>t_step) THEN
-		t:=0.0;
-		speed_cmd:=speed_cmd+speed_delta*direction;
-		IF (ABS(speed_cmd)>speed_max) THEN
-			speed_cmd:=speed_max;
-			IF (direction<0) THEN
-				t_step:=t_step*5.0;
-				IF (t_step>t_max) THEN
-					t_step:=6.0;
-				END_IF;
-			END_IF;
-			direction:=-direction;
-		END_IF;
-	END_IF;
+	(* Insert Cyclic Code HERE	*)
+	torque_cmd := p_MotorSpeedTarget;
+	rms_Id.input:=TO_REAL(sysId)*Cnt2A;	
+	rms_Id();
+	v_rms_Id:=rms_Id.rms;
+	(*
+	rms_Iq.measure:=TO_REAL(sysIq)*Cnt2A;
+	rms_Iout.measure:=TO_REAL(sysIout)*Cnt2A;
+	*)
 END_IF;	
 
 
-sysPad1:=sysHeatSinkTemp;
-sysPad2:=sysVdcLink;
+
+(* Saturazioni di coppia *)
+IF torque_cmd > MaxTorque THEN
+	torque_cmd := MaxTorque;
+ELSIF torque_cmd < -MaxTorque THEN
+	torque_cmd := -MaxTorque;
+END_IF;
 
 
-(*
-
-sysPad1 := TO_DINT(v_Torque*1000.0);
-sysPad2 := TO_DINT(v_Speed*1000.0);
-sysPad3 := TO_DINT(v_Position*1000.0);
-
-*)
-
-
-
-
+(*--- Coppia di riferimento al Drive--------*)
+sysTrqFFwd := TO_DINT((torque_cmd) * KNm2Cnt);
 
 
 END_PROGRAM

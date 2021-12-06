@@ -1,12 +1,12 @@
 ;
 ;	IEC 1131 project file
-;   c:\projects\gdm_thermal_models\step_identication\Backup\step_identication.ppj$
+;   C:\projects\gdm_thermal_models\modbus_test\modbus_test.ppj
 ;
 
-IMAGE = "step_identication.img"
-PARAMS = "step_identication.par"
+IMAGE = "modbus_test.img"
+PARAMS = "modbus_test.par"
 PARFILE = "1"
-SOURCE = "step_identication.plc"
+SOURCE = "modbus_test.plc"
 TARGET = "adv200syn_7_2_7.tgt"
 FIRMWARE = "adv200syn_7_2_7_fw_lang.fl2"
 FPRJ_DOWNLLANG = 0
