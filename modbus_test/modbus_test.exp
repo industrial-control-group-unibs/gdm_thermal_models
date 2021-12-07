@@ -14,5 +14,9 @@
 	v_LoadSpeed AT %MD2.16 : REAL; 
 	v_rms_Iq AT %MD2.20 : REAL; 
 	v_rms_Id AT %MD2.24 : REAL; 
+	v_rms_Iout AT %MD2.28 : REAL; 
+	v_rms_Vdc AT %MD2.32 : REAL; 
+	v_rms_Vo AT %MD2.36 : REAL; 
+	v_rms_Speed AT %MD2.40 : REAL; 
 	END_VAR
 

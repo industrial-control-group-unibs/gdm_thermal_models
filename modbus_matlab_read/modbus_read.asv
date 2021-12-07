@@ -26,17 +26,13 @@ dt=1;
 t=(0:dt:(30*60));
 speed_min=5;
 speed_max=90;
-speed_mean=mean([speed_max speed_min]);
-speed_ampl=speed_max-speed_mean;
-period=10*60;
-speed_target=speed_mean+speed_ampl*sin(2*pi/period*t);
-
+speed_target=;
+return;
 experiment_name=['test_',datestr(now,'yyyymmdd_HHMMSS'),'.mat'];
 experiment=[];
 for icycle=1:length(t)
     cycle_timer=tic;
     experiment.time(icycle)=now;
-    set(Load.Modbus,'ParDword',SPEED_SETPOINT,0,speed_target(idx));
     for idx=1:length(read_ipa)
         if (simulate_connection)
             value=1;
@@ -45,14 +41,13 @@ for icycle=1:length(t)
         end
         experiment.(read_ipa{idx,1})(icycle,1)=value;
     end
-    if not(simulate_connection)
-        pause(dt-toc(cycle_timer))
-    end
+    pause(dt-toc(cycle_timer))
+
     if mod(idx ,60)==0
         save(experiment_name,'experiment');
     end
 end
-%
+%set(Load.Modbus,'ParDword',3700,0,x);
 %y=get(Motor.Modbus,'ParDWord',12010,0);
 plot(experiment.time,experiment.RMS_Id)
 

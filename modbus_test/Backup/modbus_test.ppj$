@@ -1,0 +1,17 @@
+;
+;	IEC 1131 project file
+;   c:\projects\gdm_thermal_models\modbus_test\Backup\modbus_test.ppj$
+;
+
+IMAGE = "modbus_test.img"
+PARAMS = "modbus_test.par"
+PARFILE = "1"
+SOURCE = "modbus_test.plc"
+TARGET = "adv200syn_7_2_7.tgt"
+FIRMWARE = "adv200syn_7_2_7_fw_lang.fl2"
+FPRJ_DOWNLLANG = 0
+APPGEN = "ADV200Syn_7_2_7_ApllGen.bat"
+LIB = "adv200lib\adv_inout.pll"
+LIB = "adv200lib\adv_general.pll"
+LIB = "adv200lib\adv_control.pll"
+LIB = "adv200lib\adv_basic.pll"

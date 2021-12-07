@@ -13,5 +13,9 @@ VAR_GLOBAL
 	v_LoadSpeed			 AT %MD2.16 	:REAL;	(* IPA 12008 *)
 	v_rms_Iq			 AT %MD2.20 	:REAL;	(* IPA 12010 *)
 	v_rms_Id			 AT %MD2.24 	:REAL;	(* IPA 12012 *)
+	v_rms_Iout			 AT %MD2.28 	:REAL;	(* IPA 12014 *)
+	v_rms_Vdc			 AT %MD2.32 	:REAL;	(* IPA 12016 *)
+	v_rms_Vo			 AT %MD2.36 	:REAL;	(* IPA 12018 *)
+	v_rms_Speed			 AT %MD2.40 	:REAL;	(* IPA 12020 *)
 
 END_VAR
