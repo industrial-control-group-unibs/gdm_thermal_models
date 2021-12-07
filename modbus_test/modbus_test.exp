@@ -18,5 +18,6 @@
 	v_rms_Vdc AT %MD2.32 : REAL; 
 	v_rms_Vo AT %MD2.36 : REAL; 
 	v_rms_Speed AT %MD2.40 : REAL; 
+	v_temperature AT %MD2.44 : REAL; 
 	END_VAR
 

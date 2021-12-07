@@ -19,6 +19,7 @@ VAR	12014	1	"_rms_Iout"	5	0	5	0	0	""	""	""	""	"%MD2.28"	""	0
 VAR	12016	1	"_rms_Vdc"	5	0	5	0	0	""	""	""	""	"%MD2.32"	""	0	
 VAR	12018	1	"_rms_Vo"	5	0	5	0	0	""	""	""	""	"%MD2.36"	""	0	
 VAR	12020	1	"_rms_Speed"	5	0	5	0	0	""	""	""	""	"%MD2.40"	""	0	
+VAR	12022	1	"_temperature"	5	0	5	0	0	""	""	""	""	"%MD2.44"	""	0	
 ;
 ;	System parameters record
 ;
@@ -144,7 +145,7 @@ INCLUDE	"adv200syn_7_2_7_gb.ppc"
 ;	Options
 ;
 OPT	"USERMENUROOT"	"1690"	"0"	"0"	""	""	
-OPT	"COMMCONF"	"Modbus:1,1000,M#COM:3,38400,N,8,1"	""	""	""	""	
+OPT	"COMMCONF"	"Modbus:1,1000,M#COM:6,38400,N,8,1"	""	""	""	""	
 OPT	"SHORTLEN"	"20"	"1"	"14"	"15"	"8"	
 OPT	"DBTYPE"	"ADFAM"	""	""	""	""	
 OPT	"LEVEL_EN"	"1"	""	""	""	""	

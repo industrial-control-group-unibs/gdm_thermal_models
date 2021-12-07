@@ -17,5 +17,6 @@ VAR_GLOBAL
 	v_rms_Vdc			 AT %MD2.32 	:REAL;	(* IPA 12016 *)
 	v_rms_Vo			 AT %MD2.36 	:REAL;	(* IPA 12018 *)
 	v_rms_Speed			 AT %MD2.40 	:REAL;	(* IPA 12020 *)
+	v_temperature			 AT %MD2.44 	:REAL;	(* IPA 12022 *)
 
 END_VAR
