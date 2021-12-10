@@ -4,8 +4,9 @@
 
 VAR_GLOBAL
 
+		{G:"APPLICATION"}
 	p_MotorSpeedTarget			 AT %MW1.0 	:REAL;	(* IPA 11000 *)
-		{G:"MONITOR"}
+		{G:"APPLICATION"}
 	v_Position			 AT %MD2.0 	:REAL;	(* IPA 12000 *)
 	v_Speed			 AT %MD2.4 	:REAL;	(* IPA 12002 *)
 	v_Torque			 AT %MD2.8 	:REAL;	(* IPA 12004 *)

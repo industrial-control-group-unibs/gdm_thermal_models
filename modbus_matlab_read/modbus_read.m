@@ -1,5 +1,5 @@
 clear all;clc;close all
-
+load Vconv.mat
 simulate_connection=false;
 
 if not(simulate_connection)

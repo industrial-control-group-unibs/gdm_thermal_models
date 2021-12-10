@@ -465,7 +465,7 @@ IF (NOT ENABLE_CYCLIC_PRG) THEN
 ELSE
 	(* Insert Cyclic Code HERE	*)
 	speed_cmd := p_MotorSpeedTarget;
-	v_temperature:=TO_REAL(sysHeatSinkTemp)*0.1;
+	v_temperature:=TO_REAL(sysHeatSinkTemp)*0.1; (* sysHeatSinkTemp is in 0.1 C*)
 	
 	rms_Id.input:=TO_REAL(sysId)*Cnt2A;	
  	rms_Id();
@@ -490,11 +490,12 @@ ELSE
 	rms_Speed.input:=v_Speed;	
 	rms_Speed();
 	v_rms_Speed:=rms_Speed.rms;
-	END_IF;	
+END_IF;	
 
 
 
 sysSpdRef1 := TO_DINT(speed_cmd*VelConv);
+
 
 
 
