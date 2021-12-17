@@ -1,4 +1,4 @@
-ID 1638892498
+ID 1639587725
 VG DWORD $$STKLIMIT$$ C00004C0
 F DINT sysDBWriteIntegerPar FFFFFFFF
 F DINT sysDBWriteIntegerFieldMin FFFFFFFF
@@ -76,14 +76,47 @@ F INT Line_int A0010A60
 F UDINT _ControlVersion A0010B44
 F REAL LIMIT_R A0010B70
 F UDINT _BasicVersion A0010BE8
+L l0_Version ._InOutVersion A00100A0
 L END_FUNCTION ._InOutVersion A00100A8
+L $label0 .ReadCommand A0010228
 L END_FUNCTION .ReadCommand A00102BC
+L $label1 .ReadCommand A0010270
+L $label2 .ReadCommand A00102BC
+L $label0 .ReadCommandAnd A0010338
+L $label1 .ReadCommandAnd A0010338
 L END_FUNCTION .ReadCommandAnd A0010430
+L $label2 .ReadCommandAnd A00103B4
+L $label3 .ReadCommandAnd A00103B4
+L $label4 .ReadCommandAnd A00103B4
+L $label5 .ReadCommandAnd A0010428
+L $label6 .ReadCommandAnd A0010428
+L $label7 .ReadCommandAnd A0010428
+L $label0 .ReadCommandOr A00104A0
+L $label1 .ReadCommandOr A00104A0
 L END_FUNCTION .ReadCommandOr A0010580
+L $label2 .ReadCommandOr A0010510
+L $label3 .ReadCommandOr A0010510
+L $label4 .ReadCommandOr A0010510
+L $label5 .ReadCommandOr A0010578
+L $label6 .ReadCommandOr A0010578
+L $label7 .ReadCommandOr A0010578
+L l0_Version ._GeneralVersion A00105B0
 L END_FUNCTION ._GeneralVersion A00105B8
+L l0_RBitIn .RBitIn A001084C
 L END_FUNCTION .RBitIn A0010854
+L l0_Segment .Segment A0010884
+L lEnd_Segment .Segment A00108D8
+L l1_Segment .Segment A00108CC
+L $label0 .CLAMP A0010A1C
+L $label2 .CLAMP A0010A5C
+L $label1 .CLAMP A0010A54
+L l0_Version ._ControlVersion A0010B64
 L END_FUNCTION ._ControlVersion A0010B6C
+L l0 .LIMIT_R A0010B88
+L l1 .LIMIT_R A0010BB0
 L END_FUNCTION .LIMIT_R A0010BE4
+L l2 .LIMIT_R A0010BDC
+L l0_Version ._BasicVersion A0010C08
 L END_FUNCTION ._BasicVersion A0010C10
 VF InputConversionADV200 REAL Krpm 00000000
 VF InputConversionADV200 REAL Krad_s 00000004
@@ -101,6 +134,8 @@ VF InputConversionADV200 REAL vel_rpm 00000030
 VF InputConversionADV200 REAL vel 00000034
 VF InputConversionADV200 REAL trq 00000038
 VF InputConversionADV200 REAL curr 0000003C
+L $label0 .CircularBuffer A0010E6C
+L $label1 .CircularBuffer A0010E98
 VF CircularBuffer REAL input 0000002C
 VF CircularBuffer REAL sum 00000030
 VF CircularBuffer BOOL overflow 00000034
@@ -129,6 +164,8 @@ VF LineFB DINT yIni 00000008
 VF LineFB DINT xEnd 0000000C
 VF LineFB DINT yEnd 00000010
 VF LineFB DINT outY 00000014
+L l1 .Derivative_PB A00111B4
+L l2 .Derivative_PB A0011218
 VF Derivative_PB DINT inU 00000014
 VF Derivative_PB DINT fS 00000018
 VF Derivative_PB DINT tauP 0000001C
@@ -144,6 +181,8 @@ VF DerivativeR REAL tauP 00000008
 VF DerivativeR REAL Ts 0000000C
 VF DerivativeR REAL outY 00000010
 VF DerivativeR REAL prevInU 00000000
+L l1 .IntegratorDW A0011350
+L l2 .IntegratorDW A00113A0
 VF IntegratorDW DINT inU 00000010
 VF IntegratorDW DINT preset 00000014
 VF IntegratorDW DINT fS 00000018
@@ -155,6 +194,7 @@ VF IntegratorDW DINT Yint 00000000
 VF IntegratorDW DINT prevYint 00000004
 VF IntegratorDW DINT intLowLim 00000008
 VF IntegratorDW DINT intHighLim 0000000C
+L l1 .IntegratorR A001140C
 VF IntegratorR REAL inU 00000000
 VF IntegratorR REAL Ts 00000004
 VF IntegratorR REAL presetValue 00000008
@@ -162,6 +202,7 @@ VF IntegratorR BOOL presetBit 0000000C
 VF IntegratorR REAL lowLimit 00000010
 VF IntegratorR REAL highLimit 00000014
 VF IntegratorR REAL outY 00000018
+L l1 .LP_FilterDW A00114BC
 L END_FUNCTION_BLOCK .LP_FilterDW A00115E8
 VF LP_FilterDW DINT inU 00000014
 VF LP_FilterDW DINT fS 00000018
@@ -315,7 +356,7 @@ VG DINT sysSpeedPosPulsesPerRev D0002CB8
 VG BOOL ENABLE_CYCLIC_PRG C0000934
 L $label0 :Fast.cyclic_prg A0011664
 VL REAL speed_cmd cyclic_prg C0000938
-L $label1 :Fast.cyclic_prg A00117D0
+L $label1 :Fast.cyclic_prg A00117E8
 VG REAL p_MotorSpeedTarget C0001B30
 VG DINT sysHeatSinkTemp D00038B0
 VG REAL v_temperature C000205C
@@ -332,9 +373,9 @@ VG REAL v_rms_Vo C0002054
 VG REAL v_rms_Speed C0002058
 VG REAL VelConv C0000950
 VG DINT sysSpdRef1 D0003D04
-P state_machine Background A00118C0
+P state_machine Background A00118E0
 VL BOOL state_machine$$Init_x state_machine C0000954
-L end_state_machine$Init :Background.state_machine A0011AFC
+L end_state_machine$Init :Background.state_machine A0011B1C
 VL BOOL INIT_END state_machine C0000958
 VL BOOL CYCLE_STOP state_machine C000095C
 VG UDINT sysControlMode C00045DC
@@ -356,18 +397,18 @@ VG REAL RatedTorque C0000988
 VG REAL KNm2Cnt C000098C
 VG REAL MaxTorque C0000990
 VL BOOL state_machine$$Cycle_x state_machine C0000994
-L end_state_machine$Cycle :Background.state_machine A0011B4C
+L end_state_machine$Cycle :Background.state_machine A0011B6C
 VG BOOL sysDIBitWordBit1 C00041A8
-L state_machine/Cycle_state$lab1 :Background.state_machine A0011B28
-L state_machine/Cycle_state$lab0 :Background.state_machine A0011B30
+L state_machine/Cycle_state$lab1 :Background.state_machine A0011B48
+L state_machine/Cycle_state$lab0 :Background.state_machine A0011B50
 VL BOOL state_machine$$Stop_x state_machine C0000998
-L end_state_machine$Stop :Background.state_machine A0011B8C
+L end_state_machine$Stop :Background.state_machine A0011BAC
 VL BOOL state_machine$$Jump6_x state_machine C000099C
-L end_state_machine$Jump6 :Background.state_machine A0011BB0
+L end_state_machine$Jump6 :Background.state_machine A0011BD0
 VG REAL v_LoadPosition C000203C
 VG REAL v_LoadSpeed C0002040
 VG UDINT $$CODESTART$$ A0010080
-VG UDINT $$CODESIZE$$ A0011BF0
+VG UDINT $$CODESIZE$$ A0011C10
 VG UDINT $$CODEEND$$ A0030000
 VG UDINT $$DATASIZE$$ C00009A0
 VG UDINT $$BITDATASIZE$$ C0001B00
