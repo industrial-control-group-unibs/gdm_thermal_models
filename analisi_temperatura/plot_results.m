@@ -4,7 +4,9 @@ clear all;clc;close all;
 %load("test_20211216_211704.mat"); period=4/24;
 %load("test_20211216_224425.mat"); period=8/24;
 %load("test_20211217_105307.mat"); period=1/24;
-load("test_20211217_133237.mat"); period=0.2/24;
+%load("test_20211217_133237.mat"); period=period/60/60;
+%load("test_20211217_155353.mat"); period=period/60/60;
+load("test_20211220_174402.mat"); period=period/60/60;
 DISABLE_PERIOD_STOP=false;
 USE_PERIOD=false;
 REMOVE_TEMP_TREND=false || USE_PERIOD;
@@ -17,7 +19,7 @@ t_days=(experiment.time-experiment.time(1))';
 t_minutes=(t_days)*24*60;
 
 if  USE_PERIOD
-    t=mod(t_days,period)
+    t=mod(t_days,period);
 else
     t=t_days;
 end
@@ -71,13 +73,21 @@ plot(t,experiment.Id)
 hold on
 plot(t,experiment.Iout)
 plot(t,experiment.Iq)
+if isfield(experiment,'mean_Iq')
+    plot(t,experiment.mean_Id,'--')
+    plot(t,experiment.mean_Iout,'--')
+    plot(t,experiment.mean_Iq,'--')
+    legend('Id','Iout','Iq','mean Id','mean Iout','mean Iq')
+else
+    legend('Id','Iout','Iq')
+end
 set(gca,'Xtick',ticks)
 datetick('x', 'HH:MM:SS', 'keeplimits','keepticks')
 grid on
 
 xlabel('time');
 ylabel('current [A]')
-legend('Id','Iout','Iq')
+
 
 
 
@@ -120,13 +130,18 @@ M=[ones(length(t_days),1) (sin(2*pi/period*t_days)) (cos(2*pi/period*t_days))];
 par=M(not(idxs_remove),:)\experiment.Vout(not(idxs_remove),:);
 
 plot(t,experiment.Vout)
-
+hold on
+if isfield(experiment,'mean_Vout')
+    plot(t,experiment.mean_Vout,'--')
+    legend('rms Vout','mean Vout')
+else
+    legend('Vout')
+end
 xlabel('time');
 ylabel('Voltage [V] SCALA ERRATA')
 set(gca,'Xtick',ticks)
 datetick('x', 'HH:MM:SS', 'keeplimits','keepticks')
 grid on
-legend('Vout')
 
 
 linkaxes(ax,'x')
