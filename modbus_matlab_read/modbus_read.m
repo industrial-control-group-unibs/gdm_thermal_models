@@ -25,19 +25,19 @@ dt=1;
 minuti=60;
 ore=60*60;
 giorni=24*60*60;
-t=(0:dt:24*ore)';
+t=(0:dt:48*ore)';
 
-%speed_max=150;%210;
-%speed_min=-speed_max;
+speed_max=210;
+speed_min=-speed_max;
 
-speed_max=120;
-speed_min=20;
+%speed_max=120;
+%speed_min=20;
 
 speed_mean=mean([speed_max speed_min]);
 speed_ampl=speed_max-speed_mean;
-period=.2*ore;
+period=12*ore;
 
-plot_period=15*minuti;
+plot_period=5*minuti;
 speed_target=speed_mean+speed_ampl*sin(2*pi/period*t);
 
 %switch_off_for_measure=(mod(t,5*minuti)>=5);
@@ -76,7 +76,7 @@ while exp_time<t(end)
     pause(dt-toc(cycle_timer))
     
     if toc(plot_timer)>plot_period
-        save(experiment_name,'experiment');
+        save(experiment_name,'experiment','period');
         plot_timer=tic;
         tiledlayout((length(read_ipa)+1)/2,2)
         nexttile
@@ -95,4 +95,4 @@ while exp_time<t(end)
 
 end
 set(Motor.Modbus,'ParFloat',SPEED_SETPOINT,0,0.0)
-save(experiment_name,'experiment');
+save(experiment_name,'experiment','period');
