@@ -16,6 +16,12 @@ read_ipa={
     "Vdc"         , 12016, 'PARFLOAT';
     "Vout"        , 12018, 'PARFLOAT';
     "Speed"       , 12020, 'PARFLOAT';
+    "mean_Iq"     , 12024, 'PARFLOAT';
+    "mean_Id"     , 12026, 'PARFLOAT';
+    "Iout"        , 12028, 'PARFLOAT';
+    "mean_Vdc"    , 12030, 'PARFLOAT';
+    "mean_Vout"   , 12032, 'PARFLOAT';
+    "mean_Speed"  , 12034, 'PARFLOAT';
     "Temperature" , 12022, 'PARFLOAT';
     };
 
