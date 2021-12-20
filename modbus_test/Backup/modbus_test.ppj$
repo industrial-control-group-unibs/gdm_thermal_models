@@ -1,6 +1,6 @@
 ;
 ;	IEC 1131 project file
-;   c:\projects\gdm_thermal_model\modbus_test\Backup\modbus_test.ppj$
+;   c:\projects\gdm_thermal_models\modbus_test\Backup\modbus_test.ppj$
 ;
 
 IMAGE = "modbus_test.img"
