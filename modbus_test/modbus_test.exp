@@ -6,8 +6,6 @@
 
 	VAR_GLOBAL
 	p_MotorSpeedTarget AT %MW1.0 : REAL; 
-	{G:"MONITOR"}
-	v_Position AT %MD2.0 : REAL; 
 	v_Speed AT %MD2.4 : REAL; 
 	v_Torque AT %MD2.8 : REAL; 
 	v_LoadPosition AT %MD2.12 : REAL; 
@@ -19,5 +17,7 @@
 	v_rms_Vo AT %MD2.36 : REAL; 
 	v_rms_Speed AT %MD2.40 : REAL; 
 	v_temperature AT %MD2.44 : REAL; 
+	{G:"MONITOR"}
+	v_Position AT %MD2.0 : REAL; 
 	END_VAR
 

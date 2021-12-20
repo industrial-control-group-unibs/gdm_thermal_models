@@ -1,9 +1,8 @@
 clear all;clc;close all
-load Vconv.mat
 simulate_connection=false;
 
 if not(simulate_connection)
-    Motor = OpenDriveConnection(38400,'6');
+    Motor = OpenDriveConnection(38400,'3');
 end
 disp('connected')
 % Mdplc, in params:
@@ -11,8 +10,8 @@ disp('connected')
 % ipa 12000 sono parametri in sola lettura
 
 read_ipa={
-    "Id"          , 12010, 'PARFLOAT';
-    "Iq"          , 12012, 'PARFLOAT';
+    "Iq"          , 12010, 'PARFLOAT';
+    "Id"          , 12012, 'PARFLOAT';
     "Iout"        , 12014, 'PARFLOAT';
     "Vdc"         , 12016, 'PARFLOAT';
     "Vout"        , 12018, 'PARFLOAT';
@@ -26,18 +25,23 @@ dt=1;
 minuti=60;
 ore=60*60;
 giorni=24*60*60;
-t=(0:dt:4*ore)';
-t=(0:dt:5*minuti)';
-speed_max=210;
-speed_min=-210;
+t=(0:dt:24*ore)';
+
+%speed_max=150;%210;
+%speed_min=-speed_max;
+
+speed_max=120;
+speed_min=20;
+
 speed_mean=mean([speed_max speed_min]);
 speed_ampl=speed_max-speed_mean;
-period=2*minuti;
+period=.2*ore;
+
+plot_period=15*minuti;
 speed_target=speed_mean+speed_ampl*sin(2*pi/period*t);
 
-switch_off_for_measure=(mod(t,5*minuti)>=5);
-
-speed_target=speed_target.*switch_off_for_measure;
+%switch_off_for_measure=(mod(t,5*minuti)>=5);
+%speed_target=speed_target.*switch_off_for_measure;
 
 experiment_name=['test_',datestr(now,'yyyymmdd_HHMMSS'),'.mat'];
 experiment=[];
@@ -60,6 +64,7 @@ while exp_time<t(end)
     if not(simulate_connection)
         set(Motor.Modbus,'ParFloat',SPEED_SETPOINT,0,speed_target(isp));
     end
+    experiment.setpoint_speed(icycle)=speed_target(isp);
     for idx=1:length(read_ipa)
         if (simulate_connection)
             value=1;
@@ -70,7 +75,7 @@ while exp_time<t(end)
     end
     pause(dt-toc(cycle_timer))
     
-    if toc(plot_timer)>1*minuti
+    if toc(plot_timer)>plot_period
         save(experiment_name,'experiment');
         plot_timer=tic;
         tiledlayout((length(read_ipa)+1)/2,2)
