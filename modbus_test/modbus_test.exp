@@ -17,6 +17,12 @@
 	v_rms_Vo AT %MD2.36 : REAL; 
 	v_rms_Speed AT %MD2.40 : REAL; 
 	v_temperature AT %MD2.44 : REAL; 
+	v_mean_Iq AT %MD2.48 : REAL; 
+	v_mean_Id AT %MD2.52 : REAL; 
+	v_mean_Iout AT %MD2.56 : REAL; 
+	v_mean_Vdc AT %MD2.60 : REAL; 
+	v_mean_Vo AT %MD2.64 : REAL; 
+	v_mean_Speed AT %MD2.68 : REAL; 
 	{G:"MONITOR"}
 	v_Position AT %MD2.0 : REAL; 
 	END_VAR

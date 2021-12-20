@@ -1,7 +1,7 @@
 (*
  *
- * MDPlc source file: c:\projects\gdm_thermal_model\modbus_test\Backup\modbus_test.plc$
- * for project:       C:\projects\gdm_thermal_model\modbus_test\modbus_test.ppj
+ * MDPlc source file: c:\projects\gdm_thermal_models\modbus_test\Backup\modbus_test.plc$
+ * for project:       C:\projects\gdm_thermal_models\modbus_test\modbus_test.ppj
  *
  *)
 
@@ -33,6 +33,12 @@ PROGRAM state_machine WITH Background;
 	rms_Vo : RMS; 
 	rms_Speed : RMS; 
 	VelConv : REAL; 
+	mean_Vo : Mean; 
+	mean_Vdc : Mean; 
+	mean_Speed : Mean; 
+	mean_Iout : Mean; 
+	mean_Iq : Mean; 
+	mean_Id : Mean; 
 	END_VAR
 
 	(*********************)
@@ -235,6 +241,40 @@ ELSE
 	idx:=idx+1;
 	overflow:=FALSE;
 END_IF;
+
+
+END_FUNCTION_BLOCK
+
+FUNCTION_BLOCK Mean
+
+	VAR_INPUT
+	input : REAL; { DE:"actual value" } 
+	END_VAR
+
+	VAR_OUTPUT
+	mean : REAL; { DE:"computed rms value" } 
+	END_VAR
+
+	VAR
+	fast_buffer : CircularBuffer; 
+	medium_buffer : CircularBuffer; 
+	slow_buffer : CircularBuffer; 
+	END_VAR
+
+	{ CODE:ST }fast_buffer.input:=input;
+fast_buffer();
+
+
+IF (fast_buffer.overflow) THEN
+	medium_buffer.input:=fast_buffer.sum;
+	medium_buffer();
+	IF (medium_buffer.overflow) THEN
+		slow_buffer.input:=medium_buffer.sum;
+		slow_buffer();
+	END_IF;
+END_IF;
+mean:=SQRT(slow_buffer.sum*0.001);
+
 
 
 END_FUNCTION_BLOCK
@@ -491,11 +531,37 @@ ELSE
 	rms_Speed.input:=v_Speed;	
 	rms_Speed();
 	v_rms_Speed:=rms_Speed.rms;
+	
+	mean_Id.input:=TO_REAL(sysId)*Cnt2A;	
+
+	mean_Id();
+	v_mean_Id:=mean_Id.mean;
+	
+	mean_Iq.input:=TO_REAL(sysIq)*Cnt2A;	
+	mean_Iq();
+	v_mean_Iq:=mean_Iq.mean;
+	
+	mean_Iout.input:=TO_REAL(sysIout)*Cnt2A;	
+	mean_Iout();
+	v_mean_Iout:=mean_Iout.mean;
+	
+	mean_Vdc.input:=TO_REAL(sysVdcLink)*(0.0000030517578125);	
+	mean_Vdc();
+	v_mean_Vdc:=mean_Vdc.mean;
+	
+	mean_Vo.input:=TO_REAL(sysVo)*(0.0000030517578125);	
+	mean_Vo();
+	v_mean_Vo:=mean_Vo.mean;
+	
+	mean_Speed.input:=v_Speed;	
+	mean_Speed();
+	v_mean_Speed:=mean_Speed.mean;
 END_IF;	
 
 
 
 sysSpdRef1 := TO_DINT(speed_cmd*VelConv);
+
 
 
 
