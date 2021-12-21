@@ -1,7 +1,7 @@
 (*
  *
- * MDPlc source file: c:\projects\gdm_thermal_models\modbus_test\Backup\modbus_test.plc$
- * for project:       C:\projects\gdm_thermal_models\modbus_test\modbus_test.ppj
+ * MDPlc source file: c:\projects\gdm_thermal_model\modbus_test\Backup\modbus_test.plc$
+ * for project:       C:\projects\gdm_thermal_model\modbus_test\modbus_test.ppj
  *
  *)
 
@@ -273,7 +273,8 @@ IF (fast_buffer.overflow) THEN
 		slow_buffer();
 	END_IF;
 END_IF;
-mean:=SQRT(slow_buffer.sum*0.001);
+mean:=slow_buffer.sum*0.001;
+
 
 
 
