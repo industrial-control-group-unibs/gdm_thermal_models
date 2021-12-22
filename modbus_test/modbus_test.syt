@@ -1,4 +1,4 @@
-ID 1640018557
+ID 1640022286
 VG DWORD $$STKLIMIT$$ C00004C0
 F DINT sysDBWriteIntegerPar FFFFFFFF
 F DINT sysDBWriteIntegerFieldMin FFFFFFFF
@@ -174,8 +174,8 @@ VF LineFB DINT yIni 00000008
 VF LineFB DINT xEnd 0000000C
 VF LineFB DINT yEnd 00000010
 VF LineFB DINT outY 00000014
-L l1 .Derivative_PB A00112CC
-L l2 .Derivative_PB A0011330
+L l1 .Derivative_PB A00112B4
+L l2 .Derivative_PB A0011318
 VF Derivative_PB DINT inU 00000014
 VF Derivative_PB DINT fS 00000018
 VF Derivative_PB DINT tauP 0000001C
@@ -191,8 +191,8 @@ VF DerivativeR REAL tauP 00000008
 VF DerivativeR REAL Ts 0000000C
 VF DerivativeR REAL outY 00000010
 VF DerivativeR REAL prevInU 00000000
-L l1 .IntegratorDW A0011468
-L l2 .IntegratorDW A00114B8
+L l1 .IntegratorDW A0011450
+L l2 .IntegratorDW A00114A0
 VF IntegratorDW DINT inU 00000010
 VF IntegratorDW DINT preset 00000014
 VF IntegratorDW DINT fS 00000018
@@ -204,7 +204,7 @@ VF IntegratorDW DINT Yint 00000000
 VF IntegratorDW DINT prevYint 00000004
 VF IntegratorDW DINT intLowLim 00000008
 VF IntegratorDW DINT intHighLim 0000000C
-L l1 .IntegratorR A0011524
+L l1 .IntegratorR A001150C
 VF IntegratorR REAL inU 00000000
 VF IntegratorR REAL Ts 00000004
 VF IntegratorR REAL presetValue 00000008
@@ -212,8 +212,8 @@ VF IntegratorR BOOL presetBit 0000000C
 VF IntegratorR REAL lowLimit 00000010
 VF IntegratorR REAL highLimit 00000014
 VF IntegratorR REAL outY 00000018
-L l1 .LP_FilterDW A00115D4
-L END_FUNCTION_BLOCK .LP_FilterDW A0011700
+L l1 .LP_FilterDW A00115BC
+L END_FUNCTION_BLOCK .LP_FilterDW A00116E8
 VF LP_FilterDW DINT inU 00000014
 VF LP_FilterDW DINT fS 00000018
 VF LP_FilterDW DINT tauP 0000001C
@@ -465,7 +465,7 @@ VL INT mean_Id.slow_buffer.idx mean_Id C0000D2C
 VG REAL v_Position C0002030
 VG REAL v_Speed C0002034
 VG REAL v_Torque C0002038
-P cyclic_prg Fast A0011710
+P cyclic_prg Fast A00116F0
 VI DINT sysSpd Fast C0000D44
 VI DINT sysPos Fast C0000D48
 VI DINT sysIq Fast C0000D4C
@@ -473,9 +473,9 @@ VG DINT sysTrqRef D00034D0
 VI DINT sysRev Fast C0000D50
 VG DINT sysSpeedPosPulsesPerRev D0002CB8
 VG BOOL ENABLE_CYCLIC_PRG C0000D54
-L $label0 :Fast.cyclic_prg A0011784
+L $label0 :Fast.cyclic_prg A0011764
 VL REAL speed_cmd cyclic_prg C0000D58
-L $label1 :Fast.cyclic_prg A0011A6C
+L $label1 :Fast.cyclic_prg A0011A4C
 VG REAL p_MotorSpeedTarget C0001B30
 VG DINT sysHeatSinkTemp D00038B0
 VG REAL v_temperature C000205C
@@ -498,9 +498,9 @@ VG REAL v_mean_Vo C0002070
 VG REAL v_mean_Speed C0002074
 VG REAL VelConv C0000D70
 VG DINT sysSpdRef1 D0003D04
-P state_machine Background A0011B60
+P state_machine Background A0011B40
 VL BOOL state_machine$$Init_x state_machine C0000D74
-L end_state_machine$Init :Background.state_machine A0011D9C
+L end_state_machine$Init :Background.state_machine A0011D7C
 VL BOOL INIT_END state_machine C0000D78
 VL BOOL CYCLE_STOP state_machine C0000D7C
 VG UDINT sysControlMode C00045DC
@@ -522,18 +522,18 @@ VG REAL RatedTorque C0000DA8
 VG REAL KNm2Cnt C0000DAC
 VG REAL MaxTorque C0000DB0
 VL BOOL state_machine$$Cycle_x state_machine C0000DB4
-L end_state_machine$Cycle :Background.state_machine A0011DEC
+L end_state_machine$Cycle :Background.state_machine A0011DCC
 VG BOOL sysDIBitWordBit1 C00041A8
-L state_machine/Cycle_state$lab1 :Background.state_machine A0011DC8
-L state_machine/Cycle_state$lab0 :Background.state_machine A0011DD0
+L state_machine/Cycle_state$lab1 :Background.state_machine A0011DA8
+L state_machine/Cycle_state$lab0 :Background.state_machine A0011DB0
 VL BOOL state_machine$$Stop_x state_machine C0000DB8
-L end_state_machine$Stop :Background.state_machine A0011E2C
+L end_state_machine$Stop :Background.state_machine A0011E0C
 VL BOOL state_machine$$Jump6_x state_machine C0000DBC
-L end_state_machine$Jump6 :Background.state_machine A0011E50
+L end_state_machine$Jump6 :Background.state_machine A0011E30
 VG REAL v_LoadPosition C000203C
 VG REAL v_LoadSpeed C0002040
 VG UDINT $$CODESTART$$ A0010080
-VG UDINT $$CODESIZE$$ A0011E90
+VG UDINT $$CODESIZE$$ A0011E70
 VG UDINT $$CODEEND$$ A0030000
 VG UDINT $$DATASIZE$$ C0000DC0
 VG UDINT $$BITDATASIZE$$ C0001B00
