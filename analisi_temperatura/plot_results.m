@@ -74,9 +74,9 @@ hold on
 plot(t,experiment.Iout)
 plot(t,experiment.Iq)
 if isfield(experiment,'mean_Iq')
-    plot(t,experiment.mean_Id,'--')
-    plot(t,experiment.mean_Iout,'--')
-    plot(t,experiment.mean_Iq,'--')
+    plot(t,experiment.mean_Id.^2,'--')
+    plot(t,experiment.mean_Iout.^2,'--')
+    plot(t,experiment.mean_Iq.^2,'--')
     legend('Id','Iout','Iq','mean Id','mean Iout','mean Iq')
 else
     legend('Id','Iout','Iq')
@@ -93,13 +93,19 @@ ylabel('current [A]')
 
 ax(6)=nexttile;
 plot(t,experiment.Id)
+hold on
+if isfield(experiment,'mean_Id')
+    plot(t,experiment.mean_Id.^2,'--')
+legend('Id','mean Id')
+else
+legend('Id')
+end
 set(gca,'Xtick',ticks)
 datetick('x', 'HH:MM:SS', 'keeplimits','keepticks')
 grid on
 
 xlabel('time');
 ylabel('current [A]')
-legend('Id')
 
 
 
@@ -132,7 +138,7 @@ par=M(not(idxs_remove),:)\experiment.Vout(not(idxs_remove),:);
 plot(t,experiment.Vout)
 hold on
 if isfield(experiment,'mean_Vout')
-    plot(t,experiment.mean_Vout,'--')
+    plot(t,experiment.mean_Vout.^2,'--')
     legend('rms Vout','mean Vout')
 else
     legend('Vout')
