@@ -5,8 +5,9 @@ clear all;clc;close all;
 %load("test_20211216_224425.mat"); period=8/24;
 %load("test_20211217_105307.mat"); period=1/24;
 %load("test_20211217_133237.mat"); period=period/60/60;
-load("test_20211217_155353.mat"); period=period/60/60;
+%load("test_20211217_155353.mat"); period=period/60/60;
 %load("test_20211220_174402.mat"); period=period/60/60;
+load("test_20220111_181745.mat");period=period/60/60;
 DISABLE_PERIOD_STOP=false;
 USE_PERIOD=false;
 REMOVE_TEMP_TREND=false || USE_PERIOD;
@@ -63,6 +64,9 @@ set(gca,'Xtick',ticks)
 datetick('x', 'HH:MM:SS', 'keeplimits','keepticks')
 grid on
 legend('VdcLink','Vout')
+if isfield(experiment,'mean_Vout')
+    plot(t,experiment.mean_Vout.^2,'--')
+end
 
 
 
