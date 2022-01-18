@@ -1,3 +1,5 @@
+clear all
+close all
 % deltaT=T-trend
 % deltaT=[Io Id Iout Io_rms Id_rms Iout_rms (vel)??]*par
 
@@ -8,6 +10,7 @@ REMOVE_TEMP_TREND=false || USE_PERIOD;
 
 t_days=(experiment.time-experiment.time(1))';
 t_minutes=(t_days)*24*60;
+t=t_days;
 
 Id=experiment.Id;
 Iout=experiment.Iout;
@@ -31,14 +34,13 @@ hold on
 plot(t,TempTrend,'--')
 legend('Temperature','Temp Trend')
 
+%param=dTemp\[Id,Iout,Iq,Idm,Ioutm,Iqm];        %,vel,Vdc];
+
+%Stima=[Id,Iout,Iq,Idm,Ioutm,Iqm]*param';      %,vel,Vdc];
+
+
 figure(2)
 plot(t,dTemp)
-legend('deltaT')
-
-param=dTemp\[Id,Iout,Iq,Idm,Ioutm,Iqm,vel,Vdc];
-
-Stima=[Id,Iout,Iq,Idm,Ioutm,Iqm,vel,Vdc]*param';
-
-figure(3)
-plot(t,Stima)
-legend('deltaT')
+%hold on
+%plot(t,Stima,'--')
+%legend('deltaT','stima')
