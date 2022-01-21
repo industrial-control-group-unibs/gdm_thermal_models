@@ -1,8 +1,9 @@
 clear all;clc;close all
 simulate_connection=false;
 
+com='4';
 if not(simulate_connection)
-    Motor = OpenDriveConnection(38400,'3');
+    Motor = OpenDriveConnection(38400,com);
 end
 disp('connected')
 % Mdplc, in params:
@@ -49,8 +50,12 @@ speed_target=speed_mean+speed_ampl*sin(2*pi/period*t);
 %switch_off_for_measure=(mod(t,5*minuti)>=5);
 %speed_target=speed_target.*switch_off_for_measure;
 
-experiment_name=['test_',datestr(now,'yyyymmdd_HHMMSS'),'.mat'];
-experiment=[];
+if (com=='3')
+    experiment_name=['test_',datestr(now,'yyyymmdd_HHMMSS'),'.mat'];
+else
+    experiment_name=['test4_',datestr(now,'yyyymmdd_HHMMSS'),'.mat'];
+end
+    experiment=[];
 
 plot_timer=tic;
 start_experiment_time=now;
