@@ -12,7 +12,6 @@ DISABLE_PERIOD_STOP=false;
 USE_PERIOD=false;
 REMOVE_TEMP_TREND=false || USE_PERIOD;
 
-
 figure
 tl=tiledlayout(3,2);
 
