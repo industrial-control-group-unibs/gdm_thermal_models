@@ -1,7 +1,7 @@
-clear all;clc;close all
-
-test_name='test1';
-simulate_connection=true;
+function modbus_double_motor(test_name,simulate_connection)
+if (nargin<2)
+    simulate_connection=true;
+end
 
 % get the user name
 username=char(java.lang.System.getProperty('user.name'));
@@ -12,7 +12,8 @@ if isempty(row)
 end
 com_left=row.left;
 com_right=row.right;
-fprintf('Username = %s, left COM = %d, right COM = %d\n',username,com_left,com_right);
+test_path=row.folder{1};
+fprintf('Username = %s, left COM = %d, right COM = %d, saving folder = %s\n',username,com_left,com_right,test_path);
 
 
 if not(simulate_connection)
@@ -86,7 +87,7 @@ while exp_time<t(end)
 
     if toc(plot_timer)>plot_period
         if not(simulate_connection)
-            save(experiment_name,'experiment','period');
+            save([test_path,filesep,experiment_name],'experiment');
         end
         plot_timer=tic;
         figure(1)
@@ -142,5 +143,5 @@ if not(simulate_connection)
         set(RightMotor.Modbus,write_ipa.Type{idx},write_ipa.IPA(idx),0,0);
     end
 
-    save(experiment_name,'experiment','period');
+    save([test_path,filesep,experiment_name],'experiment');
 end
