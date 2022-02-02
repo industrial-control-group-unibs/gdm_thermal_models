@@ -1,5 +1,5 @@
-ID 1639587725
-VG DWORD $$STKLIMIT$$ C00004C0
+ID 1642074842
+VG DWORD $$STKLIMIT$$ C00004BC
 F DINT sysDBWriteIntegerPar FFFFFFFF
 F DINT sysDBWriteIntegerFieldMin FFFFFFFF
 F DINT sysDBWriteIntegerFieldMax FFFFFFFF
@@ -152,6 +152,16 @@ L $label0 .RMS A0010F84
 L $label1 .RMS A0010F84
 VF RMS REAL input 000000A8
 VF RMS REAL rms 000000AC
+VF Mean CircularBuffer fast_buffer 00000000
+FB CircularBuffer fast_buffer Mean 00000000 56
+VF Mean CircularBuffer medium_buffer 00000038
+FB CircularBuffer medium_buffer Mean 00000000 56
+VF Mean CircularBuffer slow_buffer 00000070
+FB CircularBuffer slow_buffer Mean 00000000 56
+L $label0 .Mean A001109C
+L $label1 .Mean A001109C
+VF Mean REAL input 000000A8
+VF Mean REAL mean 000000AC
 VF sysDBReadIntegerPar DINT ipa 00000000
 VF sysDBReadIntegerPar DINT result 00000004
 VF sysDBReadIntegerPar DINT val 00000008
@@ -164,8 +174,8 @@ VF LineFB DINT yIni 00000008
 VF LineFB DINT xEnd 0000000C
 VF LineFB DINT yEnd 00000010
 VF LineFB DINT outY 00000014
-L l1 .Derivative_PB A00111B4
-L l2 .Derivative_PB A0011218
+L l1 .Derivative_PB A00112B4
+L l2 .Derivative_PB A0011318
 VF Derivative_PB DINT inU 00000014
 VF Derivative_PB DINT fS 00000018
 VF Derivative_PB DINT tauP 0000001C
@@ -181,8 +191,8 @@ VF DerivativeR REAL tauP 00000008
 VF DerivativeR REAL Ts 0000000C
 VF DerivativeR REAL outY 00000010
 VF DerivativeR REAL prevInU 00000000
-L l1 .IntegratorDW A0011350
-L l2 .IntegratorDW A00113A0
+L l1 .IntegratorDW A0011450
+L l2 .IntegratorDW A00114A0
 VF IntegratorDW DINT inU 00000010
 VF IntegratorDW DINT preset 00000014
 VF IntegratorDW DINT fS 00000018
@@ -194,7 +204,7 @@ VF IntegratorDW DINT Yint 00000000
 VF IntegratorDW DINT prevYint 00000004
 VF IntegratorDW DINT intLowLim 00000008
 VF IntegratorDW DINT intHighLim 0000000C
-L l1 .IntegratorR A001140C
+L l1 .IntegratorR A001150C
 VF IntegratorR REAL inU 00000000
 VF IntegratorR REAL Ts 00000004
 VF IntegratorR REAL presetValue 00000008
@@ -202,8 +212,8 @@ VF IntegratorR BOOL presetBit 0000000C
 VF IntegratorR REAL lowLimit 00000010
 VF IntegratorR REAL highLimit 00000014
 VF IntegratorR REAL outY 00000018
-L l1 .LP_FilterDW A00114BC
-L END_FUNCTION_BLOCK .LP_FilterDW A00115E8
+L l1 .LP_FilterDW A00115BC
+L END_FUNCTION_BLOCK .LP_FilterDW A00116E8
 VF LP_FilterDW DINT inU 00000014
 VF LP_FilterDW DINT fS 00000018
 VF LP_FilterDW DINT tauP 0000001C
@@ -217,199 +227,314 @@ VF LP_FilterDW DINT Kr 00000008
 VF LP_FilterDW DINT prevRest 0000000C
 VF LP_FilterDW DINT auxYint 00000010
 FBC InputConversionADV200 A0010C14 00000040
-FB InputConversionADV200 InputConv $$GLOBAL$$ C00004C4 64
-VL REAL InputConv.Krpm InputConv C00004C4
-VL REAL InputConv.Krad_s InputConv C00004C8
-VL REAL InputConv.KArms InputConv C00004CC
-VL REAL InputConv.KCnt2Nm InputConv C00004D0
-VL DINT InputConv.sysPos InputConv C00004D4
-VL DINT InputConv.sysSpd InputConv C00004D8
-VL DINT InputConv.sysIq InputConv C00004DC
-VL DINT InputConv.sysTrqRef InputConv C00004E0
-VL DINT InputConv.PosDINT InputConv C00004E4
-VL REAL InputConv.offset InputConv C00004E8
-VL DINT InputConv.sysRev InputConv C00004EC
-VL REAL InputConv.pos InputConv C00004F0
-VL REAL InputConv.vel_rpm InputConv C00004F4
-VL REAL InputConv.vel InputConv C00004F8
-VL REAL InputConv.trq InputConv C00004FC
-VL REAL InputConv.curr InputConv C0000500
+FB InputConversionADV200 InputConv $$GLOBAL$$ C00004C0 64
+VL REAL InputConv.Krpm InputConv C00004C0
+VL REAL InputConv.Krad_s InputConv C00004C4
+VL REAL InputConv.KArms InputConv C00004C8
+VL REAL InputConv.KCnt2Nm InputConv C00004CC
+VL DINT InputConv.sysPos InputConv C00004D0
+VL DINT InputConv.sysSpd InputConv C00004D4
+VL DINT InputConv.sysIq InputConv C00004D8
+VL DINT InputConv.sysTrqRef InputConv C00004DC
+VL DINT InputConv.PosDINT InputConv C00004E0
+VL REAL InputConv.offset InputConv C00004E4
+VL DINT InputConv.sysRev InputConv C00004E8
+VL REAL InputConv.pos InputConv C00004EC
+VL REAL InputConv.vel_rpm InputConv C00004F0
+VL REAL InputConv.vel InputConv C00004F4
+VL REAL InputConv.trq InputConv C00004F8
+VL REAL InputConv.curr InputConv C00004FC
 FBC RMS A0010E9C 000000B0
-FB RMS rms_Id $$GLOBAL$$ C0000504 176
-VL REAL rms_Id.input rms_Id C00005AC
-VL REAL rms_Id.rms rms_Id C00005B0
-VL REAL rms_Id.fast_buffer.input rms_Id C0000530
-VL REAL rms_Id.fast_buffer.sum rms_Id C0000534
-VL BOOL rms_Id.fast_buffer.overflow rms_Id C0000538
-VL REAL rms_Id.fast_buffer.buffer rms_Id C0000504 10
-VL INT rms_Id.fast_buffer.idx rms_Id C000052C
-VL REAL rms_Id.medium_buffer.input rms_Id C0000568
-VL REAL rms_Id.medium_buffer.sum rms_Id C000056C
-VL BOOL rms_Id.medium_buffer.overflow rms_Id C0000570
-VL REAL rms_Id.medium_buffer.buffer rms_Id C000053C 10
-VL INT rms_Id.medium_buffer.idx rms_Id C0000564
-VL REAL rms_Id.slow_buffer.input rms_Id C00005A0
-VL REAL rms_Id.slow_buffer.sum rms_Id C00005A4
-VL BOOL rms_Id.slow_buffer.overflow rms_Id C00005A8
-VL REAL rms_Id.slow_buffer.buffer rms_Id C0000574 10
-VL INT rms_Id.slow_buffer.idx rms_Id C000059C
-FB RMS rms_Iq $$GLOBAL$$ C00005B4 176
-VL REAL rms_Iq.input rms_Iq C000065C
-VL REAL rms_Iq.rms rms_Iq C0000660
-VL REAL rms_Iq.fast_buffer.input rms_Iq C00005E0
-VL REAL rms_Iq.fast_buffer.sum rms_Iq C00005E4
-VL BOOL rms_Iq.fast_buffer.overflow rms_Iq C00005E8
-VL REAL rms_Iq.fast_buffer.buffer rms_Iq C00005B4 10
-VL INT rms_Iq.fast_buffer.idx rms_Iq C00005DC
-VL REAL rms_Iq.medium_buffer.input rms_Iq C0000618
-VL REAL rms_Iq.medium_buffer.sum rms_Iq C000061C
-VL BOOL rms_Iq.medium_buffer.overflow rms_Iq C0000620
-VL REAL rms_Iq.medium_buffer.buffer rms_Iq C00005EC 10
-VL INT rms_Iq.medium_buffer.idx rms_Iq C0000614
-VL REAL rms_Iq.slow_buffer.input rms_Iq C0000650
-VL REAL rms_Iq.slow_buffer.sum rms_Iq C0000654
-VL BOOL rms_Iq.slow_buffer.overflow rms_Iq C0000658
-VL REAL rms_Iq.slow_buffer.buffer rms_Iq C0000624 10
-VL INT rms_Iq.slow_buffer.idx rms_Iq C000064C
-FB RMS rms_Iout $$GLOBAL$$ C0000664 176
-VL REAL rms_Iout.input rms_Iout C000070C
-VL REAL rms_Iout.rms rms_Iout C0000710
-VL REAL rms_Iout.fast_buffer.input rms_Iout C0000690
-VL REAL rms_Iout.fast_buffer.sum rms_Iout C0000694
-VL BOOL rms_Iout.fast_buffer.overflow rms_Iout C0000698
-VL REAL rms_Iout.fast_buffer.buffer rms_Iout C0000664 10
-VL INT rms_Iout.fast_buffer.idx rms_Iout C000068C
-VL REAL rms_Iout.medium_buffer.input rms_Iout C00006C8
-VL REAL rms_Iout.medium_buffer.sum rms_Iout C00006CC
-VL BOOL rms_Iout.medium_buffer.overflow rms_Iout C00006D0
-VL REAL rms_Iout.medium_buffer.buffer rms_Iout C000069C 10
-VL INT rms_Iout.medium_buffer.idx rms_Iout C00006C4
-VL REAL rms_Iout.slow_buffer.input rms_Iout C0000700
-VL REAL rms_Iout.slow_buffer.sum rms_Iout C0000704
-VL BOOL rms_Iout.slow_buffer.overflow rms_Iout C0000708
-VL REAL rms_Iout.slow_buffer.buffer rms_Iout C00006D4 10
-VL INT rms_Iout.slow_buffer.idx rms_Iout C00006FC
-FB RMS rms_Vdc $$GLOBAL$$ C0000714 176
-VL REAL rms_Vdc.input rms_Vdc C00007BC
-VL REAL rms_Vdc.rms rms_Vdc C00007C0
-VL REAL rms_Vdc.fast_buffer.input rms_Vdc C0000740
-VL REAL rms_Vdc.fast_buffer.sum rms_Vdc C0000744
-VL BOOL rms_Vdc.fast_buffer.overflow rms_Vdc C0000748
-VL REAL rms_Vdc.fast_buffer.buffer rms_Vdc C0000714 10
-VL INT rms_Vdc.fast_buffer.idx rms_Vdc C000073C
-VL REAL rms_Vdc.medium_buffer.input rms_Vdc C0000778
-VL REAL rms_Vdc.medium_buffer.sum rms_Vdc C000077C
-VL BOOL rms_Vdc.medium_buffer.overflow rms_Vdc C0000780
-VL REAL rms_Vdc.medium_buffer.buffer rms_Vdc C000074C 10
-VL INT rms_Vdc.medium_buffer.idx rms_Vdc C0000774
-VL REAL rms_Vdc.slow_buffer.input rms_Vdc C00007B0
-VL REAL rms_Vdc.slow_buffer.sum rms_Vdc C00007B4
-VL BOOL rms_Vdc.slow_buffer.overflow rms_Vdc C00007B8
-VL REAL rms_Vdc.slow_buffer.buffer rms_Vdc C0000784 10
-VL INT rms_Vdc.slow_buffer.idx rms_Vdc C00007AC
-FB RMS rms_Vo $$GLOBAL$$ C00007C4 176
-VL REAL rms_Vo.input rms_Vo C000086C
-VL REAL rms_Vo.rms rms_Vo C0000870
-VL REAL rms_Vo.fast_buffer.input rms_Vo C00007F0
-VL REAL rms_Vo.fast_buffer.sum rms_Vo C00007F4
-VL BOOL rms_Vo.fast_buffer.overflow rms_Vo C00007F8
-VL REAL rms_Vo.fast_buffer.buffer rms_Vo C00007C4 10
-VL INT rms_Vo.fast_buffer.idx rms_Vo C00007EC
-VL REAL rms_Vo.medium_buffer.input rms_Vo C0000828
-VL REAL rms_Vo.medium_buffer.sum rms_Vo C000082C
-VL BOOL rms_Vo.medium_buffer.overflow rms_Vo C0000830
-VL REAL rms_Vo.medium_buffer.buffer rms_Vo C00007FC 10
-VL INT rms_Vo.medium_buffer.idx rms_Vo C0000824
-VL REAL rms_Vo.slow_buffer.input rms_Vo C0000860
-VL REAL rms_Vo.slow_buffer.sum rms_Vo C0000864
-VL BOOL rms_Vo.slow_buffer.overflow rms_Vo C0000868
-VL REAL rms_Vo.slow_buffer.buffer rms_Vo C0000834 10
-VL INT rms_Vo.slow_buffer.idx rms_Vo C000085C
-FB RMS rms_Speed $$GLOBAL$$ C0000874 176
-VL REAL rms_Speed.input rms_Speed C000091C
-VL REAL rms_Speed.rms rms_Speed C0000920
-VL REAL rms_Speed.fast_buffer.input rms_Speed C00008A0
-VL REAL rms_Speed.fast_buffer.sum rms_Speed C00008A4
-VL BOOL rms_Speed.fast_buffer.overflow rms_Speed C00008A8
-VL REAL rms_Speed.fast_buffer.buffer rms_Speed C0000874 10
-VL INT rms_Speed.fast_buffer.idx rms_Speed C000089C
-VL REAL rms_Speed.medium_buffer.input rms_Speed C00008D8
-VL REAL rms_Speed.medium_buffer.sum rms_Speed C00008DC
-VL BOOL rms_Speed.medium_buffer.overflow rms_Speed C00008E0
-VL REAL rms_Speed.medium_buffer.buffer rms_Speed C00008AC 10
-VL INT rms_Speed.medium_buffer.idx rms_Speed C00008D4
-VL REAL rms_Speed.slow_buffer.input rms_Speed C0000910
-VL REAL rms_Speed.slow_buffer.sum rms_Speed C0000914
-VL BOOL rms_Speed.slow_buffer.overflow rms_Speed C0000918
-VL REAL rms_Speed.slow_buffer.buffer rms_Speed C00008E4 10
-VL INT rms_Speed.slow_buffer.idx rms_Speed C000090C
-VG REAL v_Position C0002030
-VG REAL v_Speed C0002034
-VG REAL v_Torque C0002038
-P cyclic_prg Fast A00115F0
-VI DINT sysSpd Fast C0000924
-VI DINT sysPos Fast C0000928
-VI DINT sysIq Fast C000092C
-VG DINT sysTrqRef D00034D0
-VI DINT sysRev Fast C0000930
-VG DINT sysSpeedPosPulsesPerRev D0002CB8
-VG BOOL ENABLE_CYCLIC_PRG C0000934
-L $label0 :Fast.cyclic_prg A0011664
-VL REAL speed_cmd cyclic_prg C0000938
-L $label1 :Fast.cyclic_prg A00117E8
-VG REAL p_MotorSpeedTarget C0001B30
-VG DINT sysHeatSinkTemp D00038B0
-VG REAL v_temperature C000205C
-VI DINT sysId Fast C000093C
-VG REAL Cnt2A C0000940
-VG REAL v_rms_Id C0002048
-VG REAL v_rms_Iq C0002044
-VI DINT sysIout Fast C0000944
-VG REAL v_rms_Iout C000204C
-VI DINT sysVdcLink Fast C0000948
-VG REAL v_rms_Vdc C0002050
-VI DINT sysVo Fast C000094C
-VG REAL v_rms_Vo C0002054
-VG REAL v_rms_Speed C0002058
-VG REAL VelConv C0000950
-VG DINT sysSpdRef1 D0003D04
-P state_machine Background A00118E0
-VL BOOL state_machine$$Init_x state_machine C0000954
-L end_state_machine$Init :Background.state_machine A0011B1C
-VL BOOL INIT_END state_machine C0000958
-VL BOOL CYCLE_STOP state_machine C000095C
-VG UDINT sysControlMode C00045DC
+FB RMS rms_Id $$GLOBAL$$ C0000500 176
+VL REAL rms_Id.input rms_Id C00005A8
+VL REAL rms_Id.rms rms_Id C00005AC
+VL REAL rms_Id.fast_buffer.input rms_Id C000052C
+VL REAL rms_Id.fast_buffer.sum rms_Id C0000530
+VL BOOL rms_Id.fast_buffer.overflow rms_Id C0000534
+VL REAL rms_Id.fast_buffer.buffer rms_Id C0000500 10
+VL INT rms_Id.fast_buffer.idx rms_Id C0000528
+VL REAL rms_Id.medium_buffer.input rms_Id C0000564
+VL REAL rms_Id.medium_buffer.sum rms_Id C0000568
+VL BOOL rms_Id.medium_buffer.overflow rms_Id C000056C
+VL REAL rms_Id.medium_buffer.buffer rms_Id C0000538 10
+VL INT rms_Id.medium_buffer.idx rms_Id C0000560
+VL REAL rms_Id.slow_buffer.input rms_Id C000059C
+VL REAL rms_Id.slow_buffer.sum rms_Id C00005A0
+VL BOOL rms_Id.slow_buffer.overflow rms_Id C00005A4
+VL REAL rms_Id.slow_buffer.buffer rms_Id C0000570 10
+VL INT rms_Id.slow_buffer.idx rms_Id C0000598
+FB RMS rms_Iq $$GLOBAL$$ C00005B0 176
+VL REAL rms_Iq.input rms_Iq C0000658
+VL REAL rms_Iq.rms rms_Iq C000065C
+VL REAL rms_Iq.fast_buffer.input rms_Iq C00005DC
+VL REAL rms_Iq.fast_buffer.sum rms_Iq C00005E0
+VL BOOL rms_Iq.fast_buffer.overflow rms_Iq C00005E4
+VL REAL rms_Iq.fast_buffer.buffer rms_Iq C00005B0 10
+VL INT rms_Iq.fast_buffer.idx rms_Iq C00005D8
+VL REAL rms_Iq.medium_buffer.input rms_Iq C0000614
+VL REAL rms_Iq.medium_buffer.sum rms_Iq C0000618
+VL BOOL rms_Iq.medium_buffer.overflow rms_Iq C000061C
+VL REAL rms_Iq.medium_buffer.buffer rms_Iq C00005E8 10
+VL INT rms_Iq.medium_buffer.idx rms_Iq C0000610
+VL REAL rms_Iq.slow_buffer.input rms_Iq C000064C
+VL REAL rms_Iq.slow_buffer.sum rms_Iq C0000650
+VL BOOL rms_Iq.slow_buffer.overflow rms_Iq C0000654
+VL REAL rms_Iq.slow_buffer.buffer rms_Iq C0000620 10
+VL INT rms_Iq.slow_buffer.idx rms_Iq C0000648
+FB RMS rms_Iout $$GLOBAL$$ C0000660 176
+VL REAL rms_Iout.input rms_Iout C0000708
+VL REAL rms_Iout.rms rms_Iout C000070C
+VL REAL rms_Iout.fast_buffer.input rms_Iout C000068C
+VL REAL rms_Iout.fast_buffer.sum rms_Iout C0000690
+VL BOOL rms_Iout.fast_buffer.overflow rms_Iout C0000694
+VL REAL rms_Iout.fast_buffer.buffer rms_Iout C0000660 10
+VL INT rms_Iout.fast_buffer.idx rms_Iout C0000688
+VL REAL rms_Iout.medium_buffer.input rms_Iout C00006C4
+VL REAL rms_Iout.medium_buffer.sum rms_Iout C00006C8
+VL BOOL rms_Iout.medium_buffer.overflow rms_Iout C00006CC
+VL REAL rms_Iout.medium_buffer.buffer rms_Iout C0000698 10
+VL INT rms_Iout.medium_buffer.idx rms_Iout C00006C0
+VL REAL rms_Iout.slow_buffer.input rms_Iout C00006FC
+VL REAL rms_Iout.slow_buffer.sum rms_Iout C0000700
+VL BOOL rms_Iout.slow_buffer.overflow rms_Iout C0000704
+VL REAL rms_Iout.slow_buffer.buffer rms_Iout C00006D0 10
+VL INT rms_Iout.slow_buffer.idx rms_Iout C00006F8
+FB RMS rms_Vdc $$GLOBAL$$ C0000710 176
+VL REAL rms_Vdc.input rms_Vdc C00007B8
+VL REAL rms_Vdc.rms rms_Vdc C00007BC
+VL REAL rms_Vdc.fast_buffer.input rms_Vdc C000073C
+VL REAL rms_Vdc.fast_buffer.sum rms_Vdc C0000740
+VL BOOL rms_Vdc.fast_buffer.overflow rms_Vdc C0000744
+VL REAL rms_Vdc.fast_buffer.buffer rms_Vdc C0000710 10
+VL INT rms_Vdc.fast_buffer.idx rms_Vdc C0000738
+VL REAL rms_Vdc.medium_buffer.input rms_Vdc C0000774
+VL REAL rms_Vdc.medium_buffer.sum rms_Vdc C0000778
+VL BOOL rms_Vdc.medium_buffer.overflow rms_Vdc C000077C
+VL REAL rms_Vdc.medium_buffer.buffer rms_Vdc C0000748 10
+VL INT rms_Vdc.medium_buffer.idx rms_Vdc C0000770
+VL REAL rms_Vdc.slow_buffer.input rms_Vdc C00007AC
+VL REAL rms_Vdc.slow_buffer.sum rms_Vdc C00007B0
+VL BOOL rms_Vdc.slow_buffer.overflow rms_Vdc C00007B4
+VL REAL rms_Vdc.slow_buffer.buffer rms_Vdc C0000780 10
+VL INT rms_Vdc.slow_buffer.idx rms_Vdc C00007A8
+FB RMS rms_Vo $$GLOBAL$$ C00007C0 176
+VL REAL rms_Vo.input rms_Vo C0000868
+VL REAL rms_Vo.rms rms_Vo C000086C
+VL REAL rms_Vo.fast_buffer.input rms_Vo C00007EC
+VL REAL rms_Vo.fast_buffer.sum rms_Vo C00007F0
+VL BOOL rms_Vo.fast_buffer.overflow rms_Vo C00007F4
+VL REAL rms_Vo.fast_buffer.buffer rms_Vo C00007C0 10
+VL INT rms_Vo.fast_buffer.idx rms_Vo C00007E8
+VL REAL rms_Vo.medium_buffer.input rms_Vo C0000824
+VL REAL rms_Vo.medium_buffer.sum rms_Vo C0000828
+VL BOOL rms_Vo.medium_buffer.overflow rms_Vo C000082C
+VL REAL rms_Vo.medium_buffer.buffer rms_Vo C00007F8 10
+VL INT rms_Vo.medium_buffer.idx rms_Vo C0000820
+VL REAL rms_Vo.slow_buffer.input rms_Vo C000085C
+VL REAL rms_Vo.slow_buffer.sum rms_Vo C0000860
+VL BOOL rms_Vo.slow_buffer.overflow rms_Vo C0000864
+VL REAL rms_Vo.slow_buffer.buffer rms_Vo C0000830 10
+VL INT rms_Vo.slow_buffer.idx rms_Vo C0000858
+FB RMS rms_Speed $$GLOBAL$$ C0000870 176
+VL REAL rms_Speed.input rms_Speed C0000918
+VL REAL rms_Speed.rms rms_Speed C000091C
+VL REAL rms_Speed.fast_buffer.input rms_Speed C000089C
+VL REAL rms_Speed.fast_buffer.sum rms_Speed C00008A0
+VL BOOL rms_Speed.fast_buffer.overflow rms_Speed C00008A4
+VL REAL rms_Speed.fast_buffer.buffer rms_Speed C0000870 10
+VL INT rms_Speed.fast_buffer.idx rms_Speed C0000898
+VL REAL rms_Speed.medium_buffer.input rms_Speed C00008D4
+VL REAL rms_Speed.medium_buffer.sum rms_Speed C00008D8
+VL BOOL rms_Speed.medium_buffer.overflow rms_Speed C00008DC
+VL REAL rms_Speed.medium_buffer.buffer rms_Speed C00008A8 10
+VL INT rms_Speed.medium_buffer.idx rms_Speed C00008D0
+VL REAL rms_Speed.slow_buffer.input rms_Speed C000090C
+VL REAL rms_Speed.slow_buffer.sum rms_Speed C0000910
+VL BOOL rms_Speed.slow_buffer.overflow rms_Speed C0000914
+VL REAL rms_Speed.slow_buffer.buffer rms_Speed C00008E0 10
+VL INT rms_Speed.slow_buffer.idx rms_Speed C0000908
+FBC Mean A0010FC4 000000B0
+FB Mean mean_Vo $$GLOBAL$$ C0000920 176
+VL REAL mean_Vo.input mean_Vo C00009C8
+VL REAL mean_Vo.mean mean_Vo C00009CC
+VL REAL mean_Vo.fast_buffer.input mean_Vo C000094C
+VL REAL mean_Vo.fast_buffer.sum mean_Vo C0000950
+VL BOOL mean_Vo.fast_buffer.overflow mean_Vo C0000954
+VL REAL mean_Vo.fast_buffer.buffer mean_Vo C0000920 10
+VL INT mean_Vo.fast_buffer.idx mean_Vo C0000948
+VL REAL mean_Vo.medium_buffer.input mean_Vo C0000984
+VL REAL mean_Vo.medium_buffer.sum mean_Vo C0000988
+VL BOOL mean_Vo.medium_buffer.overflow mean_Vo C000098C
+VL REAL mean_Vo.medium_buffer.buffer mean_Vo C0000958 10
+VL INT mean_Vo.medium_buffer.idx mean_Vo C0000980
+VL REAL mean_Vo.slow_buffer.input mean_Vo C00009BC
+VL REAL mean_Vo.slow_buffer.sum mean_Vo C00009C0
+VL BOOL mean_Vo.slow_buffer.overflow mean_Vo C00009C4
+VL REAL mean_Vo.slow_buffer.buffer mean_Vo C0000990 10
+VL INT mean_Vo.slow_buffer.idx mean_Vo C00009B8
+FB Mean mean_Vdc $$GLOBAL$$ C00009D0 176
+VL REAL mean_Vdc.input mean_Vdc C0000A78
+VL REAL mean_Vdc.mean mean_Vdc C0000A7C
+VL REAL mean_Vdc.fast_buffer.input mean_Vdc C00009FC
+VL REAL mean_Vdc.fast_buffer.sum mean_Vdc C0000A00
+VL BOOL mean_Vdc.fast_buffer.overflow mean_Vdc C0000A04
+VL REAL mean_Vdc.fast_buffer.buffer mean_Vdc C00009D0 10
+VL INT mean_Vdc.fast_buffer.idx mean_Vdc C00009F8
+VL REAL mean_Vdc.medium_buffer.input mean_Vdc C0000A34
+VL REAL mean_Vdc.medium_buffer.sum mean_Vdc C0000A38
+VL BOOL mean_Vdc.medium_buffer.overflow mean_Vdc C0000A3C
+VL REAL mean_Vdc.medium_buffer.buffer mean_Vdc C0000A08 10
+VL INT mean_Vdc.medium_buffer.idx mean_Vdc C0000A30
+VL REAL mean_Vdc.slow_buffer.input mean_Vdc C0000A6C
+VL REAL mean_Vdc.slow_buffer.sum mean_Vdc C0000A70
+VL BOOL mean_Vdc.slow_buffer.overflow mean_Vdc C0000A74
+VL REAL mean_Vdc.slow_buffer.buffer mean_Vdc C0000A40 10
+VL INT mean_Vdc.slow_buffer.idx mean_Vdc C0000A68
+FB Mean mean_Speed $$GLOBAL$$ C0000A80 176
+VL REAL mean_Speed.input mean_Speed C0000B28
+VL REAL mean_Speed.mean mean_Speed C0000B2C
+VL REAL mean_Speed.fast_buffer.input mean_Speed C0000AAC
+VL REAL mean_Speed.fast_buffer.sum mean_Speed C0000AB0
+VL BOOL mean_Speed.fast_buffer.overflow mean_Speed C0000AB4
+VL REAL mean_Speed.fast_buffer.buffer mean_Speed C0000A80 10
+VL INT mean_Speed.fast_buffer.idx mean_Speed C0000AA8
+VL REAL mean_Speed.medium_buffer.input mean_Speed C0000AE4
+VL REAL mean_Speed.medium_buffer.sum mean_Speed C0000AE8
+VL BOOL mean_Speed.medium_buffer.overflow mean_Speed C0000AEC
+VL REAL mean_Speed.medium_buffer.buffer mean_Speed C0000AB8 10
+VL INT mean_Speed.medium_buffer.idx mean_Speed C0000AE0
+VL REAL mean_Speed.slow_buffer.input mean_Speed C0000B1C
+VL REAL mean_Speed.slow_buffer.sum mean_Speed C0000B20
+VL BOOL mean_Speed.slow_buffer.overflow mean_Speed C0000B24
+VL REAL mean_Speed.slow_buffer.buffer mean_Speed C0000AF0 10
+VL INT mean_Speed.slow_buffer.idx mean_Speed C0000B18
+FB Mean mean_Iout $$GLOBAL$$ C0000B30 176
+VL REAL mean_Iout.input mean_Iout C0000BD8
+VL REAL mean_Iout.mean mean_Iout C0000BDC
+VL REAL mean_Iout.fast_buffer.input mean_Iout C0000B5C
+VL REAL mean_Iout.fast_buffer.sum mean_Iout C0000B60
+VL BOOL mean_Iout.fast_buffer.overflow mean_Iout C0000B64
+VL REAL mean_Iout.fast_buffer.buffer mean_Iout C0000B30 10
+VL INT mean_Iout.fast_buffer.idx mean_Iout C0000B58
+VL REAL mean_Iout.medium_buffer.input mean_Iout C0000B94
+VL REAL mean_Iout.medium_buffer.sum mean_Iout C0000B98
+VL BOOL mean_Iout.medium_buffer.overflow mean_Iout C0000B9C
+VL REAL mean_Iout.medium_buffer.buffer mean_Iout C0000B68 10
+VL INT mean_Iout.medium_buffer.idx mean_Iout C0000B90
+VL REAL mean_Iout.slow_buffer.input mean_Iout C0000BCC
+VL REAL mean_Iout.slow_buffer.sum mean_Iout C0000BD0
+VL BOOL mean_Iout.slow_buffer.overflow mean_Iout C0000BD4
+VL REAL mean_Iout.slow_buffer.buffer mean_Iout C0000BA0 10
+VL INT mean_Iout.slow_buffer.idx mean_Iout C0000BC8
+FB Mean mean_Iq $$GLOBAL$$ C0000BE0 176
+VL REAL mean_Iq.input mean_Iq C0000C88
+VL REAL mean_Iq.mean mean_Iq C0000C8C
+VL REAL mean_Iq.fast_buffer.input mean_Iq C0000C0C
+VL REAL mean_Iq.fast_buffer.sum mean_Iq C0000C10
+VL BOOL mean_Iq.fast_buffer.overflow mean_Iq C0000C14
+VL REAL mean_Iq.fast_buffer.buffer mean_Iq C0000BE0 10
+VL INT mean_Iq.fast_buffer.idx mean_Iq C0000C08
+VL REAL mean_Iq.medium_buffer.input mean_Iq C0000C44
+VL REAL mean_Iq.medium_buffer.sum mean_Iq C0000C48
+VL BOOL mean_Iq.medium_buffer.overflow mean_Iq C0000C4C
+VL REAL mean_Iq.medium_buffer.buffer mean_Iq C0000C18 10
+VL INT mean_Iq.medium_buffer.idx mean_Iq C0000C40
+VL REAL mean_Iq.slow_buffer.input mean_Iq C0000C7C
+VL REAL mean_Iq.slow_buffer.sum mean_Iq C0000C80
+VL BOOL mean_Iq.slow_buffer.overflow mean_Iq C0000C84
+VL REAL mean_Iq.slow_buffer.buffer mean_Iq C0000C50 10
+VL INT mean_Iq.slow_buffer.idx mean_Iq C0000C78
+FB Mean mean_Id $$GLOBAL$$ C0000C90 176
+VL REAL mean_Id.input mean_Id C0000D38
+VL REAL mean_Id.mean mean_Id C0000D3C
+VL REAL mean_Id.fast_buffer.input mean_Id C0000CBC
+VL REAL mean_Id.fast_buffer.sum mean_Id C0000CC0
+VL BOOL mean_Id.fast_buffer.overflow mean_Id C0000CC4
+VL REAL mean_Id.fast_buffer.buffer mean_Id C0000C90 10
+VL INT mean_Id.fast_buffer.idx mean_Id C0000CB8
+VL REAL mean_Id.medium_buffer.input mean_Id C0000CF4
+VL REAL mean_Id.medium_buffer.sum mean_Id C0000CF8
+VL BOOL mean_Id.medium_buffer.overflow mean_Id C0000CFC
+VL REAL mean_Id.medium_buffer.buffer mean_Id C0000CC8 10
+VL INT mean_Id.medium_buffer.idx mean_Id C0000CF0
+VL REAL mean_Id.slow_buffer.input mean_Id C0000D2C
+VL REAL mean_Id.slow_buffer.sum mean_Id C0000D30
+VL BOOL mean_Id.slow_buffer.overflow mean_Id C0000D34
+VL REAL mean_Id.slow_buffer.buffer mean_Id C0000D00 10
+VL INT mean_Id.slow_buffer.idx mean_Id C0000D28
+VG REAL v_Position C000202C
+VG REAL v_Speed C0002030
+VG REAL v_Torque C0002034
+P cyclic_prg Fast A00116F0
+VI DINT sysSpd Fast C0000D40
+VI DINT sysPos Fast C0000D44
+VI DINT sysIq Fast C0000D48
+VG DINT sysTrqRef D00034A8
+VI DINT sysRev Fast C0000D4C
+VG DINT sysSpeedPosPulsesPerRev D0002CB0
+VG BOOL ENABLE_CYCLIC_PRG C0000D50
+L $label0 :Fast.cyclic_prg A0011764
+VL REAL speed_cmd cyclic_prg C0000D54
+L $label1 :Fast.cyclic_prg A0011A4C
+VG REAL p_MotorSpeedTarget C0001B2C
+VG DINT sysHeatSinkTemp D0003890
+VG REAL v_temperature C0002058
+VI DINT sysId Fast C0000D58
+VG REAL Cnt2A C0000D5C
+VG REAL v_rms_Id C0002044
+VG REAL v_rms_Iq C0002040
+VI DINT sysIout Fast C0000D60
+VG REAL v_rms_Iout C0002048
+VI DINT sysVdcLink Fast C0000D64
+VG REAL v_rms_Vdc C000204C
+VI DINT sysVo Fast C0000D68
+VG REAL v_rms_Vo C0002050
+VG REAL v_rms_Speed C0002054
+VG REAL v_mean_Id C0002060
+VG REAL v_mean_Iq C000205C
+VG REAL v_mean_Iout C0002064
+VG REAL v_mean_Vdc C0002068
+VG REAL v_mean_Vo C000206C
+VG REAL v_mean_Speed C0002070
+VG REAL VelConv C0000D6C
+VG DINT sysSpdRef1 D0003CE0
+P state_machine Background A0011B40
+VL BOOL state_machine$$Init_x state_machine C0000D70
+L end_state_machine$Init :Background.state_machine A0011D7C
+VL BOOL INIT_END state_machine C0000D74
+VL BOOL CYCLE_STOP state_machine C0000D78
+VG UDINT sysControlMode C00045D0
 FBC sysDBReadRealPar FFFFFFFF 0000000C
-FB sysDBReadRealPar readRealPar state_machine C0000960 12
-VL DINT readRealPar.ipa readRealPar C0000960
-VL DINT readRealPar.result readRealPar C0000964
-VL REAL readRealPar.val readRealPar C0000968
-VG REAL DriveRatCur C000096C
+FB sysDBReadRealPar readRealPar state_machine C0000D7C 12
+VL DINT readRealPar.ipa readRealPar C0000D7C
+VL DINT readRealPar.result readRealPar C0000D80
+VL REAL readRealPar.val readRealPar C0000D84
+VG REAL DriveRatCur C0000D88
 FBC sysDBReadIntegerPar FFFFFFFF 0000000C
-FB sysDBReadIntegerPar readIntPar state_machine C0000970 12
-VL DINT readIntPar.ipa readIntPar C0000970
-VL DINT readIntPar.result readIntPar C0000974
-VL DINT readIntPar.val readIntPar C0000978
-VG REAL FullScaleSpeed C000097C
-VG REAL RatCur C0000980
-VG REAL RatKTrq C0000984
-VG REAL RatedTorque C0000988
-VG REAL KNm2Cnt C000098C
-VG REAL MaxTorque C0000990
-VL BOOL state_machine$$Cycle_x state_machine C0000994
-L end_state_machine$Cycle :Background.state_machine A0011B6C
+FB sysDBReadIntegerPar readIntPar state_machine C0000D8C 12
+VL DINT readIntPar.ipa readIntPar C0000D8C
+VL DINT readIntPar.result readIntPar C0000D90
+VL DINT readIntPar.val readIntPar C0000D94
+VG REAL FullScaleSpeed C0000D98
+VG REAL RatCur C0000D9C
+VG REAL RatKTrq C0000DA0
+VG REAL RatedTorque C0000DA4
+VG REAL KNm2Cnt C0000DA8
+VG REAL MaxTorque C0000DAC
+VL BOOL state_machine$$Cycle_x state_machine C0000DB0
+L end_state_machine$Cycle :Background.state_machine A0011DCC
 VG BOOL sysDIBitWordBit1 C00041A8
-L state_machine/Cycle_state$lab1 :Background.state_machine A0011B48
-L state_machine/Cycle_state$lab0 :Background.state_machine A0011B50
-VL BOOL state_machine$$Stop_x state_machine C0000998
-L end_state_machine$Stop :Background.state_machine A0011BAC
-VL BOOL state_machine$$Jump6_x state_machine C000099C
-L end_state_machine$Jump6 :Background.state_machine A0011BD0
-VG REAL v_LoadPosition C000203C
-VG REAL v_LoadSpeed C0002040
+L state_machine/Cycle_state$lab1 :Background.state_machine A0011DA8
+L state_machine/Cycle_state$lab0 :Background.state_machine A0011DB0
+VL BOOL state_machine$$Stop_x state_machine C0000DB4
+L end_state_machine$Stop :Background.state_machine A0011E0C
+VL BOOL state_machine$$Jump6_x state_machine C0000DB8
+L end_state_machine$Jump6 :Background.state_machine A0011E30
+VG REAL v_LoadPosition C0002038
+VG REAL v_LoadSpeed C000203C
 VG UDINT $$CODESTART$$ A0010080
-VG UDINT $$CODESIZE$$ A0011C10
+VG UDINT $$CODESIZE$$ A0011E70
 VG UDINT $$CODEEND$$ A0030000
-VG UDINT $$DATASIZE$$ C00009A0
-VG UDINT $$BITDATASIZE$$ C0001B00
-VG UDINT $$RITDATASIZE$$ C0001AC0
+VG UDINT $$DATASIZE$$ C0000DBC
+VG UDINT $$BITDATASIZE$$ C0001AFC
+VG UDINT $$RITDATASIZE$$ C0001ABC
