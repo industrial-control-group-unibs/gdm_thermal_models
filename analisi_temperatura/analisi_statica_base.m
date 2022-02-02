@@ -28,19 +28,23 @@ par=M\Temp;
 TempTrend=M*par;
 dTemp=Temp-TempTrend;
 
-figure(1)
-plot(t,Temp)
-hold on
-plot(t,TempTrend,'--')
-legend('Temperature','Temp Trend')
+% figure(1)
+% plot(t,Temp)
+% hold on
+% plot(t,TempTrend,'--')
+% legend('Temperature','Temp Trend')
 
 %param=dTemp\[Id,Iout,Iq,Idm,Ioutm,Iqm];        %,vel,Vdc];
 
 %Stima=[Id,Iout,Iq,Idm,Ioutm,Iqm]*param';      %,vel,Vdc];
 
-
 figure(2)
 plot(t,dTemp)
+hold on
+B = 1/20*ones(20,1);
+dTemp = filter(B,1,dTemp);
+TF = islocalmin(dTemp,'MinSeparation',0.03,'SamplePoints',t);
+plot(t,dTemp,t(TF),dTemp(TF),'r*')
 %hold on
 %plot(t,Stima,'--')
 %legend('deltaT','stima')
