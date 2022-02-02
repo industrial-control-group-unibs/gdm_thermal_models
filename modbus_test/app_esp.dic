@@ -1,5 +1,8 @@
 # ES Español
 
+<_ControlMode
+>
+
 <_LoadPosition
 >
 
@@ -25,6 +28,9 @@
 >
 
 <_MotorSpeedTarget
+>
+
+<_MotorTorqueRef
 >
 
 <_Position

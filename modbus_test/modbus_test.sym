@@ -1,4 +1,4 @@
-ID 1642074842
+ID 1643793996
 VG DWORD $$STKLIMIT$$ C00004BC
 F DINT sysDBWriteIntegerPar FFFFFFFF
 F DINT sysDBWriteIntegerFieldMin FFFFFFFF
@@ -473,21 +473,27 @@ VG DINT sysTrqRef D00034A8
 VI DINT sysRev Fast C0000D4C
 VG DINT sysSpeedPosPulsesPerRev D0002CB0
 VG BOOL ENABLE_CYCLIC_PRG C0000D50
-L $label0 :Fast.cyclic_prg A0011764
+L $label0 :Fast.cyclic_prg A001177C
 VL REAL speed_cmd cyclic_prg C0000D54
-L $label1 :Fast.cyclic_prg A0011A4C
+VL REAL torque_cmd cyclic_prg C0000D58
+VL REAL torque_max cyclic_prg C0000D5C
+L $label1 :Fast.cyclic_prg A0011AC8
+VG REAL p_MotorTorqueRef C0001B38
+L $label2 :Fast.cyclic_prg A001179C
+L $label4 :Fast.cyclic_prg A00117E0
+L $label3 :Fast.cyclic_prg A00117D8
 VG REAL p_MotorSpeedTarget C0001B2C
 VG DINT sysHeatSinkTemp D0003890
 VG REAL v_temperature C0002058
-VI DINT sysId Fast C0000D58
-VG REAL Cnt2A C0000D5C
+VI DINT sysId Fast C0000D60
+VG REAL Cnt2A C0000D64
 VG REAL v_rms_Id C0002044
 VG REAL v_rms_Iq C0002040
-VI DINT sysIout Fast C0000D60
+VI DINT sysIout Fast C0000D68
 VG REAL v_rms_Iout C0002048
-VI DINT sysVdcLink Fast C0000D64
+VI DINT sysVdcLink Fast C0000D6C
 VG REAL v_rms_Vdc C000204C
-VI DINT sysVo Fast C0000D68
+VI DINT sysVo Fast C0000D70
 VG REAL v_rms_Vo C0002050
 VG REAL v_rms_Speed C0002054
 VG REAL v_mean_Id C0002060
@@ -496,45 +502,49 @@ VG REAL v_mean_Iout C0002064
 VG REAL v_mean_Vdc C0002068
 VG REAL v_mean_Vo C000206C
 VG REAL v_mean_Speed C0002070
-VG REAL VelConv C0000D6C
+VG REAL VelConv C0000D74
 VG DINT sysSpdRef1 D0003CE0
-P state_machine Background A0011B40
-VL BOOL state_machine$$Init_x state_machine C0000D70
-L end_state_machine$Init :Background.state_machine A0011D7C
-VL BOOL INIT_END state_machine C0000D74
-VL BOOL CYCLE_STOP state_machine C0000D78
+VG REAL KNm2Cnt C0000D78
+VG DINT sysTrqFFwd D0002B28
+P state_machine Background A0011BE0
+VL BOOL state_machine$$Init_x state_machine C0000D7C
+L end_state_machine$Init :Background.state_machine A0011E1C
+VL BOOL INIT_END state_machine C0000D80
+VL BOOL CYCLE_STOP state_machine C0000D84
 VG UDINT sysControlMode C00045D0
 FBC sysDBReadRealPar FFFFFFFF 0000000C
-FB sysDBReadRealPar readRealPar state_machine C0000D7C 12
-VL DINT readRealPar.ipa readRealPar C0000D7C
-VL DINT readRealPar.result readRealPar C0000D80
-VL REAL readRealPar.val readRealPar C0000D84
-VG REAL DriveRatCur C0000D88
+FB sysDBReadRealPar readRealPar state_machine C0000D88 12
+VL DINT readRealPar.ipa readRealPar C0000D88
+VL DINT readRealPar.result readRealPar C0000D8C
+VL REAL readRealPar.val readRealPar C0000D90
+VG REAL DriveRatCur C0000D94
 FBC sysDBReadIntegerPar FFFFFFFF 0000000C
-FB sysDBReadIntegerPar readIntPar state_machine C0000D8C 12
-VL DINT readIntPar.ipa readIntPar C0000D8C
-VL DINT readIntPar.result readIntPar C0000D90
-VL DINT readIntPar.val readIntPar C0000D94
-VG REAL FullScaleSpeed C0000D98
-VG REAL RatCur C0000D9C
-VG REAL RatKTrq C0000DA0
-VG REAL RatedTorque C0000DA4
-VG REAL KNm2Cnt C0000DA8
-VG REAL MaxTorque C0000DAC
-VL BOOL state_machine$$Cycle_x state_machine C0000DB0
-L end_state_machine$Cycle :Background.state_machine A0011DCC
+FB sysDBReadIntegerPar readIntPar state_machine C0000D98 12
+VL DINT readIntPar.ipa readIntPar C0000D98
+VL DINT readIntPar.result readIntPar C0000D9C
+VL DINT readIntPar.val readIntPar C0000DA0
+VG REAL FullScaleSpeed C0000DA4
+VG REAL RatCur C0000DA8
+VG REAL RatKTrq C0000DAC
+VG REAL RatedTorque C0000DB0
+VG REAL MaxTorque C0000DB4
+VL BOOL state_machine$$Cycle_x state_machine C0000DB8
+L end_state_machine$Cycle :Background.state_machine A0011EA8
 VG BOOL sysDIBitWordBit1 C00041A8
-L state_machine/Cycle_state$lab1 :Background.state_machine A0011DA8
-L state_machine/Cycle_state$lab0 :Background.state_machine A0011DB0
-VL BOOL state_machine$$Stop_x state_machine C0000DB4
-L end_state_machine$Stop :Background.state_machine A0011E0C
-VL BOOL state_machine$$Jump6_x state_machine C0000DB8
-L end_state_machine$Jump6 :Background.state_machine A0011E30
+L state_machine/Cycle_state$lab3 :Background.state_machine A0011E84
+VG INT p_ControlMode C0001B34
+L state_machine/Cycle_state$lab1 :Background.state_machine A0011E74
+L state_machine/Cycle_state$lab0 :Background.state_machine A0011E80
+L state_machine/Cycle_state$lab2 :Background.state_machine A0011E8C
+VL BOOL state_machine$$Stop_x state_machine C0000DBC
+L end_state_machine$Stop :Background.state_machine A0011EE8
+VL BOOL state_machine$$Jump6_x state_machine C0000DC0
+L end_state_machine$Jump6 :Background.state_machine A0011F0C
 VG REAL v_LoadPosition C0002038
 VG REAL v_LoadSpeed C000203C
 VG UDINT $$CODESTART$$ A0010080
-VG UDINT $$CODESIZE$$ A0011E70
+VG UDINT $$CODESIZE$$ A0011F50
 VG UDINT $$CODEEND$$ A0030000
-VG UDINT $$DATASIZE$$ C0000DBC
+VG UDINT $$DATASIZE$$ C0000DC4
 VG UDINT $$BITDATASIZE$$ C0001AFC
 VG UDINT $$RITDATASIZE$$ C0001ABC

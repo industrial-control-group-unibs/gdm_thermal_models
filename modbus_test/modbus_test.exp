@@ -6,6 +6,8 @@
 
 	VAR_GLOBAL
 	p_MotorSpeedTarget AT %MW1.0 : REAL; 
+	p_ControlMode AT %MW1.8 : INT; 
+	p_MotorTorqueRef AT %MD1.12 : REAL; 
 	v_Speed AT %MD2.4 : REAL; 
 	v_Torque AT %MD2.8 : REAL; 
 	v_LoadPosition AT %MD2.12 : REAL; 

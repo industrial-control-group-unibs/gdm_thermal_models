@@ -1,7 +1,7 @@
 (*
  *
- * MDPlc source file: c:\projects\gdm_thermal_model\modbus_test\modbus_test.plc
- * for project:       c:\projects\gdm_thermal_model\modbus_test\modbus_test
+ * MDPlc source file: c:\projects\gdm_thermal_models\modbus_test\modbus_test.plc
+ * for project:       c:\projects\gdm_thermal_models\modbus_test\modbus_test
  *
  *)
 
@@ -437,10 +437,16 @@ END_STEP
 STEP Cycle_state :
 	{ CODE:ST }IF (sysDIBitWordBit1) THEN
 	ENABLE_CYCLIC_PRG := TRUE;
-	sysControlMode := 1;
+	
+	IF (p_ControlMode>=0 AND p_ControlMode<=2) THEN
+		sysControlMode := p_ControlMode;
+	ELSE
+		sysControlMode := 1;
+	END_IF;
 ELSE
 	ENABLE_CYCLIC_PRG := FALSE;
 END_IF;
+
 
 
 
@@ -473,6 +479,7 @@ PROGRAM cyclic_prg
 	speed_cmd : REAL; 
 	torque_max : REAL := 3.0; 
 	speed_max : REAL := 100.0; 
+	torque_cmd : REAL; 
 	END_VAR
 
 	{ CODE:ST }(* Conversione degli input del drive nel sistema internazionale *)
@@ -492,7 +499,7 @@ InputConv();
 
 (*
 Se il drive  è controllato in coppia il riferimento di coppia è
-sysTrqFFwd := TO_DINT((torque_cmd) * KNm2Cnt);
+
 
 Se il controllore  è controllato in velocità il riferimento di velocità è
 sysSpdRef1 := TO_DINT(speed_cmd*VelConv);    
@@ -504,8 +511,17 @@ sysTrqFFwd := TO_DINT((torque_cmd) * KNm2Cnt);
 IF (NOT ENABLE_CYCLIC_PRG) THEN
 (* Se il motore non è abilitato *)
 	speed_cmd := 0.0;
+	torque_cmd := 0.0;
+	torque_max:=4.0;
 ELSE
 	(* Insert Cyclic Code HERE	*)
+	IF (p_MotorTorqueRef>torque_max) THEN
+		torque_cmd:=torque_max;
+	ELSIF (p_MotorTorqueRef<-torque_max) THEN
+		torque_cmd:=torque_max;
+	ELSE
+		torque_cmd:=p_MotorTorqueRef;
+	END_IF;
 	speed_cmd := p_MotorSpeedTarget;
 	v_temperature:=TO_REAL(sysHeatSinkTemp)*0.1; (* sysHeatSinkTemp is in 0.1 C*)
 	
@@ -521,11 +537,11 @@ ELSE
 	rms_Iout();
 	v_rms_Iout:=rms_Iout.rms;
 	
-	rms_Vdc.input:=TO_REAL(sysVdcLink)*(0.0000030517578125);	
+	rms_Vdc.input:=TO_REAL(sysVdcLink)*(0.00000651925802);	
 	rms_Vdc();
 	v_rms_Vdc:=rms_Vdc.rms;
 	
-	rms_Vo.input:=TO_REAL(sysVo)*(0.0000030517578125);	
+	rms_Vo.input:=TO_REAL(sysVo)*(0.00000074505806);	
 	rms_Vo();
 	v_rms_Vo:=rms_Vo.rms;
 	
@@ -546,11 +562,11 @@ ELSE
 	mean_Iout();
 	v_mean_Iout:=mean_Iout.mean;
 	
-	mean_Vdc.input:=TO_REAL(sysVdcLink)*(0.0000030517578125);	
+	mean_Vdc.input:=TO_REAL(sysVdcLink)*(0.00000651925802);	
 	mean_Vdc();
 	v_mean_Vdc:=mean_Vdc.mean;
 	
-	mean_Vo.input:=TO_REAL(sysVo)*(0.0000030517578125);	
+	mean_Vo.input:=TO_REAL(sysVo)*(0.00000074505806);	
 	mean_Vo();
 	v_mean_Vo:=mean_Vo.mean;
 	
@@ -562,6 +578,9 @@ END_IF;
 
 
 sysSpdRef1 := TO_DINT(speed_cmd*VelConv);
+sysTrqFFwd := TO_DINT((torque_cmd) * KNm2Cnt);
+
+
 
 
 
