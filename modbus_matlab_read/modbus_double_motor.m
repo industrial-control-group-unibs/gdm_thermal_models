@@ -1,6 +1,6 @@
 function modbus_double_motor(test_name,simulate_connection)
 if (nargin<2)
-    simulate_connection=true;
+    simulate_connection=false;
 end
 
 % get the user name

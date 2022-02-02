@@ -445,7 +445,9 @@ STEP Cycle_state :
 	END_IF;
 ELSE
 	ENABLE_CYCLIC_PRG := FALSE;
+	p_ControlMode:=1;
 END_IF;
+
 
 
 

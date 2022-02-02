@@ -6472,7 +6472,7 @@ A0011E1C  60F8CF85		ld.w d15, #0x30DB8 ; ADR 0xC0000DB8
 
 #140			JMPCN	end_state_machine$Cycle
 (-) BOOL
-A0011E20  00440FDF		jeq d15, #0, #0x0044 ; JUMP 0xA0011EA8
+A0011E20  00480FDF		jeq d15, #0, #0x0048 ; JUMP 0xA0011EB0
 
 #141		
 #142		(* BODY OF Cycle *)
@@ -6569,7 +6569,7 @@ A0011E7C  7450FF59		st.w [a15]0x45D0, d15
 #180				(* END_IF *)
 #181				JMP		state_machine/Cycle_state$lab2
 (-) UDINT
-A0011E80  0006001D		j #0x000006 ; JUMP 0xA0011E8C
+A0011E80  000A001D		j #0x00000A ; JUMP 0xA0011E94
 
 #182		state_machine/Cycle_state$lab3:
 #183		
@@ -6585,119 +6585,129 @@ A0011E84  F000003B		mov d15, #0
 A0011E88  50D0CFA5		st.w #0x30D50, d15 ; ADR 0xC0000D50
 
 #189		
-#190		state_machine/Cycle_state$lab2:
-#191			(* END_IF *)
-#192		
+#190				(* p_ControlMode:=1; *)
+#191				LD		1	{L:11}
+(*) UNDEF
+A0011E8C  F000103B		mov d15, #1
+
+#192				ST		p_ControlMode	{L:11}
+(*) USINT
+A0011E90  C9B4CF25		st.h #0x31B34, d15 ; ADR 0xC0001B34
+
 #193		
-#194		(* Test condition TR4 pin_in 0 *)
-#195			LD		CYCLE_STOP
+#194		state_machine/Cycle_state$lab2:
+#195			(* END_IF *)
+#196		
+#197		
+#198		(* Test condition TR4 pin_in 0 *)
+#199			LD		CYCLE_STOP
 (*) UNDEF
-A0011E8C  60C4CF85		ld.w d15, #0x30D84 ; ADR 0xC0000D84
+A0011E94  60C4CF85		ld.w d15, #0x30D84 ; ADR 0xC0000D84
 
-#196			ST		state_machine$$Stop_x
+#200			ST		state_machine$$Stop_x
 (*) BOOL
-A0011E90  60FCCFA5		st.w #0x30DBC, d15 ; ADR 0xC0000DBC
+A0011E98  60FCCFA5		st.w #0x30DBC, d15 ; ADR 0xC0000DBC
 
-#197			R		state_machine$$Cycle_x
+#201			R		state_machine$$Cycle_x
 (*) BOOL
-A0011E94  FC000091		movh.a a15, #0xC000 ; ADR 0xC0000DB8
-A0011E98  60F8FFD9		lea a15,[a15]0x0DB8
-A0011E9C  0840F809		ld.bu d8, [a15]
-A0011EA0  8FA008AB		seln d8, d15, d8, #0
-A0011EA4  0800F889		st.b [a15], d8
-
-#198		
-#199		end_state_machine$Cycle:
-#200			LD		state_machine$$Stop_x
-(*) UNDEF
-A0011EA8  60FCCF85		ld.w d15, #0x30DBC ; ADR 0xC0000DBC
-
-#201			JMPCN	end_state_machine$Stop
-(-) BOOL
-A0011EAC  001E0FDF		jeq d15, #0, #0x001E ; JUMP 0xA0011EE8
+A0011E9C  FC000091		movh.a a15, #0xC000 ; ADR 0xC0000DB8
+A0011EA0  60F8FFD9		lea a15,[a15]0x0DB8
+A0011EA4  0840F809		ld.bu d8, [a15]
+A0011EA8  8FA008AB		seln d8, d15, d8, #0
+A0011EAC  0800F889		st.b [a15], d8
 
 #202		
-#203		(* BODY OF Stop *)
-#204		{SRC:state_machine/Stop_state}
-#205		
-#206			(* ENABLE_CYCLIC_PRG := FALSE; *)
-#207			LD		FALSE	{L:1}
+#203		end_state_machine$Cycle:
+#204			LD		state_machine$$Stop_x
 (*) UNDEF
-A0011EB0  F000003B		mov d15, #0
+A0011EB0  60FCCF85		ld.w d15, #0x30DBC ; ADR 0xC0000DBC
 
-#208			ST		ENABLE_CYCLIC_PRG	{L:1}
-(*) BOOL
-A0011EB4  50D0CFA5		st.w #0x30D50, d15 ; ADR 0xC0000D50
+#205			JMPCN	end_state_machine$Stop
+(-) BOOL
+A0011EB4  001E0FDF		jeq d15, #0, #0x001E ; JUMP 0xA0011EF0
 
+#206		
+#207		(* BODY OF Stop *)
+#208		{SRC:state_machine/Stop_state}
 #209		
-#210			(* CYCLE_STOP := TRUE; *)
-#211			LD		TRUE	{L:2}
+#210			(* ENABLE_CYCLIC_PRG := FALSE; *)
+#211			LD		FALSE	{L:1}
 (*) UNDEF
-A0011EB8  F000103B		mov d15, #1
+A0011EB8  F000003B		mov d15, #0
 
-#212			ST		CYCLE_STOP	{L:2}
+#212			ST		ENABLE_CYCLIC_PRG	{L:1}
 (*) BOOL
-A0011EBC  60C4CFA5		st.w #0x30D84, d15 ; ADR 0xC0000D84
+A0011EBC  50D0CFA5		st.w #0x30D50, d15 ; ADR 0xC0000D50
 
 #213		
-#214			(* v_Torque := 0.0; *)
-#215			LD		0.0	{L:4}
+#214			(* CYCLE_STOP := TRUE; *)
+#215			LD		TRUE	{L:2}
 (*) UNDEF
-A0011EC0  F00000BB		mov.u d15, #0x0000 ; COSTREAL 0.000000
-A0011EC4  F0000F9B		addih d15, d15, #0x0000
+A0011EC0  F000103B		mov d15, #1
 
-#216			ST		v_Torque	{L:4}
-(*) REAL
-A0011EC8  0234CFA5		st.w #0x32034, d15 ; ADR 0xC0002034
+#216			ST		CYCLE_STOP	{L:2}
+(*) BOOL
+A0011EC4  60C4CFA5		st.w #0x30D84, d15 ; ADR 0xC0000D84
 
 #217		
-#218		
-#219		(* Test condition TR5 pin_in 0 *)
-#220			LD		CYCLE_STOP
+#218			(* v_Torque := 0.0; *)
+#219			LD		0.0	{L:4}
 (*) UNDEF
-A0011ECC  60C4CF85		ld.w d15, #0x30D84 ; ADR 0xC0000D84
+A0011EC8  F00000BB		mov.u d15, #0x0000 ; COSTREAL 0.000000
+A0011ECC  F0000F9B		addih d15, d15, #0x0000
 
-#221			ST		state_machine$$Jump6_x
-(*) BOOL
-A0011ED0  70C0CFA5		st.w #0x30DC0, d15 ; ADR 0xC0000DC0
+#220			ST		v_Torque	{L:4}
+(*) REAL
+A0011ED0  0234CFA5		st.w #0x32034, d15 ; ADR 0xC0002034
 
-#222			R		state_machine$$Stop_x
-(*) BOOL
-A0011ED4  FC000091		movh.a a15, #0xC000 ; ADR 0xC0000DBC
-A0011ED8  60FCFFD9		lea a15,[a15]0x0DBC
-A0011EDC  0840F809		ld.bu d8, [a15]
-A0011EE0  8FA008AB		seln d8, d15, d8, #0
-A0011EE4  0800F889		st.b [a15], d8
-
-#223		
-#224		end_state_machine$Stop:
-#225			LD		state_machine$$Jump6_x
+#221		
+#222		
+#223		(* Test condition TR5 pin_in 0 *)
+#224			LD		CYCLE_STOP
 (*) UNDEF
-A0011EE8  70C0CF85		ld.w d15, #0x30DC0 ; ADR 0xC0000DC0
+A0011ED4  60C4CF85		ld.w d15, #0x30D84 ; ADR 0xC0000D84
 
-#226			JMPCN	end_state_machine$Jump6
-(-) BOOL
-A0011EEC  00100FDF		jeq d15, #0, #0x0010 ; JUMP 0xA0011F0C
+#225			ST		state_machine$$Jump6_x
+(*) BOOL
+A0011ED8  70C0CFA5		st.w #0x30DC0, d15 ; ADR 0xC0000DC0
+
+#226			R		state_machine$$Stop_x
+(*) BOOL
+A0011EDC  FC000091		movh.a a15, #0xC000 ; ADR 0xC0000DBC
+A0011EE0  60FCFFD9		lea a15,[a15]0x0DBC
+A0011EE4  0840F809		ld.bu d8, [a15]
+A0011EE8  8FA008AB		seln d8, d15, d8, #0
+A0011EEC  0800F889		st.b [a15], d8
 
 #227		
-#228		(* JUMP TO Stop *)
-#229			LD		TRUE
+#228		end_state_machine$Stop:
+#229			LD		state_machine$$Jump6_x
 (*) UNDEF
-A0011EF0  F000103B		mov d15, #1
+A0011EF0  70C0CF85		ld.w d15, #0x30DC0 ; ADR 0xC0000DC0
 
-#230			ST		state_machine$$Stop_x
+#230			JMPCN	end_state_machine$Jump6
+(-) BOOL
+A0011EF4  00100FDF		jeq d15, #0, #0x0010 ; JUMP 0xA0011F14
+
+#231		
+#232		(* JUMP TO Stop *)
+#233			LD		TRUE
+(*) UNDEF
+A0011EF8  F000103B		mov d15, #1
+
+#234			ST		state_machine$$Stop_x
 (*) BOOL
-A0011EF4  60FCCFA5		st.w #0x30DBC, d15 ; ADR 0xC0000DBC
+A0011EFC  60FCCFA5		st.w #0x30DBC, d15 ; ADR 0xC0000DBC
 
-#231			R		state_machine$$Jump6_x
+#235			R		state_machine$$Jump6_x
 (*) BOOL
-A0011EF8  FC000091		movh.a a15, #0xC000 ; ADR 0xC0000DC0
-A0011EFC  70C0FFD9		lea a15,[a15]0x0DC0
-A0011F00  0840F809		ld.bu d8, [a15]
-A0011F04  8FA008AB		seln d8, d15, d8, #0
-A0011F08  0800F889		st.b [a15], d8
+A0011F00  FC000091		movh.a a15, #0xC000 ; ADR 0xC0000DC0
+A0011F04  70C0FFD9		lea a15,[a15]0x0DC0
+A0011F08  0840F809		ld.bu d8, [a15]
+A0011F0C  8FA008AB		seln d8, d15, d8, #0
+A0011F10  0800F889		st.b [a15], d8
 
-A0011F0C  0180000D		ret
+A0011F14  0180000D		ret
 
 END_PROGRAM
 
@@ -6708,11 +6718,11 @@ END_PROGRAM
 
 
 *** INPUT:
-A0011F10  0180000D		ret
+A0011F18  0180000D		ret
 
 
 *** OUTPUT:
-A0011F14  0180000D		ret
+A0011F1C  0180000D		ret
 
 
 
@@ -6720,10 +6730,10 @@ A0011F14  0180000D		ret
 	Init code generation for task Background
 **************************************************
 
-A0011F18  F000103B		mov d15, #1
-A0011F1C  50FCCFA5		st.w #0x30D7C, d15 ; ADR 0xC0000D7C
+A0011F20  F000103B		mov d15, #1
+A0011F24  50FCCFA5		st.w #0x30D7C, d15 ; ADR 0xC0000D7C
 
-A0011F20  0180000D		ret
+A0011F28  0180000D		ret
 
 
 
