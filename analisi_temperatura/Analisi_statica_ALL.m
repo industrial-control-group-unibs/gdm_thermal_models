@@ -27,13 +27,27 @@ Pw_rms=Iout_rms.*Vout_rms;
 Pws=Iout.*Vout;
 
 param=[Id_rms,Id,Iq_rms,Iq,Pw_rms,Pws,vel_rms,vel];
+ 
+figure(2)
+plot(t,Temp)
+hold on 
+[VALp,PKp] = findpeaks(Temp,'MinPeakProminence', 0.5);
+plot(t,Temp,t(PKp),Temp(PKp),'r*') 
+hold on 
+[VALn,PKn] = findpeaks(-Temp,'MinPeakProminence', 0.5);
+plot(t,Temp,t(PKn),Temp(PKn),'b*')
 
-coef=Temp\param;
-Stima=coef*param';
+pause
+
+Temp1=Temp(1:PKp(1));
+t1=t(1:PKp(1));
+param1=param(1:PKp(1),:);
+coef=Temp1\param1;
+Stima=coef*param1';
 
 figure(1)
-plot(t,Temp)
+plot(t1,Temp1)
 hold on
-plot(t,Stima/1000000000,'--')
+plot(t1,Stima,'--')
 legend('Temperature','Stima')
 

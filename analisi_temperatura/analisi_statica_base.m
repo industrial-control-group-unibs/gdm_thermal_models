@@ -40,11 +40,20 @@ dTemp=Temp-TempTrend;
 
 figure(2)
 plot(t,dTemp)
-hold on
-B = 1/20*ones(20,1);
-dTemp = filter(B,1,dTemp);
-TF = islocalmin(dTemp,'MinSeparation',0.03,'SamplePoints',t);
-plot(t,dTemp,t(TF),dTemp(TF),'r*')
+hold on 
+[VALp,PKp] = findpeaks(dTemp,'MinPeakProminence', 0.5);
+plot(t,dTemp,t(PKp),dTemp(PKp),'r*')
+hold on 
+[VALn,PKn] = findpeaks(-dTemp,'MinPeakProminence', 0.5);
+plot(t,dTemp,t(PKn),dTemp(PKn),'b*')
+
+% figure(3)
+% plot(t,dTemp)
+% hold on
+% B = 1/20*ones(20,1);
+% dTemp = filter(B,1,dTemp);
+% TF = islocalmin(dTemp,'MinSeparation',0.03,'SamplePoints',t);
+% plot(t,dTemp,t(TF),dTemp(TF),'r*')
 %hold on
 %plot(t,Stima,'--')
 %legend('deltaT','stima')
