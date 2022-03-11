@@ -10,7 +10,7 @@ REMOVE_TEMP_TREND=false || USE_PERIOD;
 
 t_days=(experiment.time-experiment.time(1))';
 t_minutes=(t_days)*24*60;
-t=t_days;
+t=t_minutes;
 
 Id=experiment.Id;
 Iout=experiment.Iout;
